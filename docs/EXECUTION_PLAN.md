@@ -36,6 +36,6 @@ Nomes JSON camelCase. Datas públicas em epoch ms. Estado de domínio em package
 
 Node 24 LTS, pnpm 10.24; TypeScript ESM; React/Vite/Phaser; Fastify 5; Better Auth com adaptador Prisma; PostgreSQL 17; Prisma 6.19 (API estável e suporte Node 24, evitando migração v7 de configuração nesta primeira entrega). Versões exatas registradas em package.json e lockfile após consulta oficial.
 
-Caça por encontros determinísticos, sem ticks por segundo. Resultado fixado no começo de cada encontro com snapshot válido, tempo consumido em blocos de combate; limite de 8h desde última liquidação e no máximo ~2000 encontros. Todas as mutações liquidam progresso sob bloqueio de personagem. Mercado usa transação e locks ordenados. Boss persiste snapshots e resultado planejado no início, liquida por horário do servidor com recibo único por participante. Detalhes e evidências finais em GAME_DESIGN e MVP_CHECKLIST.
+Caça por encontros determinísticos, sem ticks por segundo. Resultado fixado no começo de cada encontro com snapshot válido, tempo consumido em blocos de combate; limite de 8h desde última liquidação e no máximo 1600 encontros. Todas as mutações liquidam progresso em transação sob advisory lock global. Mercado serializa transferência e cancelamento no mesmo lock compartilhado. Boss persiste snapshots e resultado planejado no início, conclui no horário do servidor com recibo único por participante. Detalhes e evidências finais em GAME_DESIGN e MVP_CHECKLIST.
 
 Sem AWS provisionada ou publicação autorizada. Licença definitiva pertence ao proprietário.
