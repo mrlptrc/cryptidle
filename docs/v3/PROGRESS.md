@@ -5,6 +5,15 @@ Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
 This file has NOT been independently verified against the current branch or CI.
 Merge with newer repository records; do not overwrite newer evidence.
 
+## Update — 2026-10-07 (art kit import, before Stage 3)
+- Authorized task: integrate cryptidle-art-kit per assets/IMPORT_INSTRUCTIONS.md and assets/AGENTS.md.
+- Branch / commit: feat/v3-art-kit-import (stacked on feat/v3-stage2-auto-combat), commit 0b48ca8.
+- Changes: kit copied without overwriting anything (no path collisions); 11 image hashes verified; assets/PILOT_INTEGRATION.md added (inspection results, runtime status, missing-art inventory, Warrior/Bat pilot plan); root AGENTS.md now points to assets/AGENTS.md. No runtime file changed.
+- Commands: sha256 check against art-kit.manifest.json (11/11 match); pnpm validate:assets passed.
+- Blocker: git push failed twice with GitHub "Internal Server Error" (request 5FCC:1B6A8D:24551E:2C3758:6AC660C5), so there is no PR yet.
+- Pending owner decisions: approve the Warrior model; confirm 192×192 frames vs runtime 112×144; region↔background mapping (the kit's "swamp" is runtime citadel.png).
+- Next concrete action: retry `git push -u origin feat/v3-art-kit-import` and open the PR against feat/v3-stage2-auto-combat.
+
 ## Update — 2026-10-07 (Stage 2 implementation)
 - Authorized task: Stage 2, automatic combat and 24h offline.
 - Branch / commit: feat/v3-stage2-auto-combat (stacked on feat/v3-stage1-baseline); code commit 1f7acd1. PR https://github.com/mrlptrc/cryptidle/pull/3 (base: Stage 1 branch).
