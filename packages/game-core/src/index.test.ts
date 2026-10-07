@@ -107,6 +107,7 @@ describe('configurable automatic combat',()=>{
     const c=startHunt(fresh(),[],'hollow',0);expect(visibleEvents(c.encounter!)).toEqual([]);
     const half=settleHunt(c,[],Math.floor(c.encounter!.durationMs/2)).character.encounter!;
     expect(visibleEvents(half).every(e=>e.atMs<=half.durationMs-half.remainingMs)).toBe(true);
+    const early=settleHunt(c,[],1000).character.encounter!;expect(early.monsterHp).toBeLessThan(early.monsterMaxHp);expect(early.monsterHp).toBeGreaterThan(0);
     const r=settleHunt(c,[],3_600_000);expect(Object.values(r.summary.skillUses!).reduce((a,b)=>a+b,0)).toBeGreaterThan(r.summary.combats);
   });
   it('settles a full 24h offline window with bounded cost for every class',()=>{

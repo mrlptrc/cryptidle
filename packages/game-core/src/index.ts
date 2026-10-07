@@ -67,7 +67,11 @@ export function chooseSkill(rules:AutomationRule[],ready:(skillId:string)=>boole
 export function visibleEvents(fight:Encounter):CombatEvent[] { const elapsed=fight.durationMs-fight.remainingMs; return (fight.events??[]).filter(e=>e.atMs<=elapsed); }
 function hpAt(fight:Encounter):number {
   if(!fight.events?.length)return Math.max(1,Math.ceil(fight.monsterMaxHp*fight.remainingMs/fight.durationMs));
-  const seen=visibleEvents(fight);return Math.max(1,seen.length?seen[seen.length-1].foeHp:fight.monsterMaxHp);
+  // Interpolate inside the current round so the bar moves smoothly; never shows the kill before it resolves.
+  const elapsed=fight.durationMs-fight.remainingMs,next=fight.events.findIndex(e=>e.atMs>elapsed);
+  if(next<0)return Math.max(1,fight.events[fight.events.length-1].foeHp);
+  const from=next>0?fight.events[next-1]:{atMs:0,foeHp:fight.monsterMaxHp},to=fight.events[next];
+  return Math.max(1,Math.ceil(from.foeHp-(from.foeHp-to.foeHp)*(elapsed-from.atMs)/Math.max(1,to.atMs-from.atMs)));
 }
 const slots:Slot[]=['weapon','head','chest','accessory','weapon','accessory','head','chest'];
 const rarities:Rarity[]=['common','common','uncommon','uncommon','rare','rare','epic','epic'];
