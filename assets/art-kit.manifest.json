@@ -310,26 +310,28 @@
     {
       "id": "characters.warrior.sheets.idle",
       "path": "characters/warrior/sheets/idle.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab template breathing-idle, east, 4 frames; packed by tools/gpt_sprite_pipeline.py --scale 1",
-      "notes": "Consistent identity and feet; pending owner review of GIF."
+      "notes": "Consistent identity and feet; pending owner review of GIF.",
+      "approval": "Owner asked to integrate on 2026-10-07"
     },
     {
       "id": "characters.warrior.sheets.walk",
       "path": "characters/warrior/sheets/walk.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab template walking-8-frames, east, 8 frames; packed by tools/gpt_sprite_pipeline.py --scale 1",
-      "notes": "Consistent identity and feet; pending owner review of GIF."
+      "notes": "Consistent identity and feet; pending owner review of GIF.",
+      "approval": "Owner asked to integrate on 2026-10-07"
     },
     {
       "id": "characters.warrior.sheets.attack",
       "path": "characters/warrior/sheets/attack.png",
-      "status": "rejected",
+      "status": "draft",
       "runtime_ready": false,
-      "origin": "PixelLab v3 custom attack, east, start/end frame = east rotation (3rd attempt)",
-      "notes": "Rejected: mid frames turn toward the camera and the sword swings backward. Kept only as evidence; needs a new approach."
+      "origin": "PixelLab edit_image_pixen keyframes (frames/attack-keyframes: anticipation, impact, follow-through; 3 generations) from the approved east rotation; guard = east rotation. Packed in 224x192 cells, feet at (96,172).",
+      "notes": "Replaces the rejected v3 attempts. 5 key poses, no in-betweens. Pending owner review in game."
     }
   ]
 }

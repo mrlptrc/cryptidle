@@ -2,26 +2,22 @@
   "actor": "warrior",
   "action": "attack",
   "texture": "characters/warrior/sheets/attack.png",
-  "frameWidth": 192,
+  "frameWidth": 224,
   "frameHeight": 192,
-  "frames": 9,
+  "frames": 5,
   "pivot": {
-    "x": 0.5,
+    "x": 0.42857142857142855,
     "y": 0.8958333333333334
   },
   "durations_ms": [
-    83,
-    83,
-    83,
-    83,
-    83,
-    83,
-    83,
-    83,
-    83
+    90,
+    140,
+    180,
+    130,
+    90
   ],
   "loop": false,
-  "impact_frame": 4,
+  "impact_frame": 2,
   "sourceScale": 1.0,
   "backgroundKey": "alpha",
   "status": "draft",
@@ -29,10 +25,10 @@
     {
       "frame": 0,
       "sourceBox": [
-        41,
-        26,
-        108,
-        150
+        57,
+        50,
+        124,
+        174
       ],
       "actorHeight": 124,
       "feetX": 96.4,
@@ -41,99 +37,55 @@
     {
       "frame": 1,
       "sourceBox": [
-        41,
-        26,
-        96,
-        150
+        46,
+        21,
+        119,
+        173
       ],
-      "actorHeight": 124,
-      "feetX": 96.5,
+      "actorHeight": 152,
+      "feetX": 96.2,
       "specksRemoved": 0
     },
     {
       "frame": 2,
       "sourceBox": [
-        41,
-        26,
-        99,
-        150
+        28,
+        47,
+        175,
+        168
       ],
-      "actorHeight": 124,
-      "feetX": 96.1,
+      "actorHeight": 121,
+      "feetX": 96.4,
       "specksRemoved": 0
     },
     {
       "frame": 3,
       "sourceBox": [
-        19,
-        27,
-        103,
-        150
+        44,
+        46,
+        117,
+        174
       ],
-      "actorHeight": 123,
-      "feetX": 96.0,
+      "actorHeight": 128,
+      "feetX": 95.7,
       "specksRemoved": 0
     },
     {
       "frame": 4,
       "sourceBox": [
-        20,
-        28,
-        105,
-        150
-      ],
-      "actorHeight": 122,
-      "feetX": 96.0,
-      "specksRemoved": 0
-    },
-    {
-      "frame": 5,
-      "sourceBox": [
-        20,
-        28,
-        103,
-        150
-      ],
-      "actorHeight": 122,
-      "feetX": 96.0,
-      "specksRemoved": 0
-    },
-    {
-      "frame": 6,
-      "sourceBox": [
-        35,
-        26,
-        101,
-        150
-      ],
-      "actorHeight": 124,
-      "feetX": 96.0,
-      "specksRemoved": 0
-    },
-    {
-      "frame": 7,
-      "sourceBox": [
-        41,
-        26,
-        96,
-        150
-      ],
-      "actorHeight": 124,
-      "feetX": 96.4,
-      "specksRemoved": 0
-    },
-    {
-      "frame": 8,
-      "sourceBox": [
-        41,
-        26,
-        108,
-        150
+        57,
+        50,
+        124,
+        174
       ],
       "actorHeight": 124,
       "feetX": 96.4,
       "specksRemoved": 0
     }
   ],
-  "warnings": []
+  "warnings": [
+    "frame 2: pose touches its grid cell edge in the source; it may be cut off or the grid is wrong",
+    "actor height varies 121-152px: check whether the generator changed body size between poses (fine only for crouch/jump/death)"
+  ],
+  "origin": "PixelLab edit_image_pixen keyframes (anticipation, impact, follow-through) from the approved east rotation; guard = east rotation"
 }

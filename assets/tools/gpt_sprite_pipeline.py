@@ -109,6 +109,7 @@ def main() -> None:
     ap.add_argument("--frames", type=int, help="poses to use, in reading order (default: all cells)")
     ap.add_argument("--height", type=int, default=120, help="target actor height in px for this action's tallest pose")
     ap.add_argument("--scale-from", type=Path, help="reuse the scale of an approved action JSON so all actions share one body size")
+    ap.add_argument("--cell-width", type=int, default=CELL, help="wider cells for long weapons; feet stay at x=96")
     ap.add_argument("--scale", type=float, help="fixed scale; use 1 for sprites already at native pixel size (e.g. PixelLab)")
     ap.add_argument("--key", help="background key colour as hex (default: sampled from corners)")
     ap.add_argument("--tolerance", type=int, default=90)
@@ -120,6 +121,7 @@ def main() -> None:
     ap.add_argument("--root", type=Path, default=ROOT, help="assets root (override only for tests)")
     args = ap.parse_args()
     root = args.root
+    CW = args.cell_width
 
     cols, rows = (int(v) for v in args.grid.lower().split("x"))
     count = args.frames or cols * rows
@@ -157,24 +159,24 @@ def main() -> None:
     else:
         scale = args.height / tallest
 
-    sheet = Image.new("RGBA", (CELL * count, CELL))
+    sheet = Image.new("RGBA", (CW * count, CELL))
     report = []
     for i, (cell, box, specks) in enumerate(cells):
         fx = feet_x(cell, box)
         actor = pixelate(cell.crop(box), scale, args.colors)
         ox = round(PIVOT[0] - (fx - box[0]) * scale)
         oy = PIVOT[1] - actor.height
-        frame = Image.new("RGBA", (CELL, CELL))
+        frame = Image.new("RGBA", (CW, CELL))
         frame.alpha_composite(actor, (max(-actor.width, ox), oy))
         fb = frame.getbbox() or (0, 0, 0, 0)
-        clipped = ox < 0 or oy < 0 or ox + actor.width > CELL
-        near_edge = fb[0] < EDGE_PAD or fb[1] < EDGE_PAD or fb[2] > CELL - EDGE_PAD
+        clipped = ox < 0 or oy < 0 or ox + actor.width > CW
+        near_edge = fb[0] < EDGE_PAD or fb[1] < EDGE_PAD or fb[2] > CW - EDGE_PAD
         if clipped:
-            warnings.append(f"frame {i}: actor does not fit in {CELL}px cell at this scale (lower --height)")
+            warnings.append(f"frame {i}: actor does not fit in {CW}x{CELL}px cell at this scale (lower --height or raise --cell-width)")
         elif near_edge:
             warnings.append(f"frame {i}: actor within {EDGE_PAD}px of the cell edge")
         frame.save(frames_dir / f"{i:02d}.png")
-        sheet.alpha_composite(frame, (i * CELL, 0))
+        sheet.alpha_composite(frame, (i * CW, 0))
         report.append({"frame": i, "sourceBox": box, "actorHeight": actor.height, "feetX": round(fx * scale - box[0] * scale + ox, 1), "specksRemoved": specks})
 
     heights = [r["actorHeight"] for r in report]
@@ -184,22 +186,22 @@ def main() -> None:
     sheet_path = sheets_dir / f"{args.action}.png"
     sheet.save(sheet_path)
     duration = round(1000 / args.fps)
-    meta = {"actor": args.actor, "action": args.action, "texture": sheet_path.relative_to(root).as_posix(), "frameWidth": CELL, "frameHeight": CELL,
-            "frames": count, "pivot": {"x": PIVOT[0] / CELL, "y": PIVOT[1] / CELL}, "durations_ms": [duration] * count, "loop": args.loop,
+    meta = {"actor": args.actor, "action": args.action, "texture": sheet_path.relative_to(root).as_posix(), "frameWidth": CW, "frameHeight": CELL,
+            "frames": count, "pivot": {"x": PIVOT[0] / CW, "y": PIVOT[1] / CELL}, "durations_ms": [duration] * count, "loop": args.loop,
             "impact_frame": args.impact_frame, "sourceScale": scale, "backgroundKey": ("#%02x%02x%02x" % key) if key else "alpha", "status": "draft",
             "report": report, "warnings": warnings}
     (sheets_dir / f"{args.action}.json").write_text(json.dumps(meta, indent=2) + "\n")
 
     # Review images at 2x on three grounds; the GIF plays at the configured speed.
-    big = [f.resize((CELL * 2, CELL * 2), Image.Resampling.NEAREST) for f in (Image.open(frames_dir / f"{i:02d}.png") for i in range(count))]
-    preview = Image.new("RGBA", (CELL * 2 * count, CELL * 2 * 3))
+    big = [f.resize((CW * 2, CELL * 2), Image.Resampling.NEAREST) for f in (Image.open(frames_dir / f"{i:02d}.png") for i in range(count))]
+    preview = Image.new("RGBA", (CW * 2 * count, CELL * 2 * 3))
     for row, ground in enumerate(((16, 27, 28, 255), (232, 220, 195, 255), (71, 127, 124, 255))):
         for i, f in enumerate(big):
             tile = Image.new("RGBA", f.size, ground)
             tile.alpha_composite(f)
             for x in range(0, f.width, 8):  # pivot line
                 tile.putpixel((x, PIVOT[1] * 2), (215, 170, 96, 255))
-            preview.paste(tile, (i * CELL * 2, row * CELL * 2))
+            preview.paste(tile, (i * CW * 2, row * CELL * 2))
     preview.save(sheets_dir / f"{args.action}-preview.png")
     gif = [Image.alpha_composite(Image.new("RGBA", f.size, (16, 27, 28, 255)), f).convert("P", palette=Image.Palette.ADAPTIVE) for f in big]
     gif[0].save(sheets_dir / f"{args.action}-preview.gif", save_all=True, append_images=gif[1:], duration=duration, loop=0 if args.loop else 1)
@@ -209,8 +211,8 @@ def main() -> None:
         spec = json.loads(spec_path.read_text())
         entry = spec.setdefault("animations", {}).setdefault(args.action, {})
         entry.update({"texture": meta["texture"], "frames": list(range(count)), "durations_ms": meta["durations_ms"], "impact_frame": args.impact_frame, "loop": args.loop})
-        spec["pivot"] = meta["pivot"]
-        spec["frame_size"] = [CELL, CELL]
+        spec.setdefault("animations", {})[args.action]["pivot"] = meta["pivot"]
+        spec["frame_size"] = [CW, CELL]
         spec["status"] = "draft"
         spec["runtime_ready"] = False
         spec_path.write_text(json.dumps(spec, indent=2) + "\n")
