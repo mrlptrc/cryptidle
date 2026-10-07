@@ -5,6 +5,14 @@ Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
 This file has NOT been independently verified against the current branch or CI.
 Merge with newer repository records; do not overwrite newer evidence.
 
+## Update — 2026-10-07 (Warrior art closed)
+- Commits 778b503 and d7e2dd3 on feat/v3-art-kit-import; CI passed: https://github.com/mrlptrc/cryptidle/actions/runs/37656168194
+- The new Warrior (skin 0) is now used everywhere: portraits (welcome, class choice, profile, boss room, ranking, skins) via /art/warrior-v2-portrait.png, and every World scene (town, all regions, other players) via spriteKey().
+- Attack: 3 PixelLab edit_image_pixen keyframes (3 generations) + the east rotation, 5 frames in 224×192 cells with pivotX 96/224; CombatAction gained pivotX.
+- Still procedural fallback: Warrior skill/hurt/death; skin 1 "Veterano das Cinzas"; Mage, Priest and monsters (no new art yet).
+- PixelLab: 20 generations left. Evidence: docs/evidence/home-warrior-v2.png, warrior-v2-attack-preview.png.
+- Not verified: the in-game hunt/town with a logged-in character (needs a DB).
+
 ## Update — 2026-10-07 (Warrior art pilot)
 - Branch / commit: feat/v3-art-kit-import @ d8de8ab, PR #4. CI passed: https://github.com/mrlptrc/cryptidle/actions/runs/37654643660
 - The owner provided references/concepts/four-classes-lineup.png (ChatGPT) as the class look.
