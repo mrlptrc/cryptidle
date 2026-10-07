@@ -1,0 +1,14 @@
+node_modules/
+dist/
+cdk.out/
+.env
+.env.*
+!.env.example
+*.log
+output/
+playwright-report/
+test-results/
+backups/
+*.dump
+.DS_Store
+apps/server/generated/
