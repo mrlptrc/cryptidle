@@ -1,0 +1,34 @@
+# V3 Baseline Audit (Stage 1)
+
+Audited on 2026-10-07 against branch `feat/v3-stage1-baseline` (based on `origin/main` @ `6a2674e`).
+Older checklists (`docs/MVP_CHECKLIST.md`, `docs/VISUAL_ROUND_*`) were **not** used as evidence of current behavior.
+
+**Environment limit:** the Docker engine on the audit machine returned HTTP 500, so no disposable PostgreSQL was available.
+The PostgreSQL integration suite (`apps/server/test/integration.test.ts`) and the Playwright two-player journey (`tests/e2e/journey.spec.ts`) were **not executed** in this iteration. No browser inspection was done.
+
+Legend for issue type: **[D]** confirmed defect · **[F]** future feature · **[L]** intentional limitation · **[H]** unverified hypothesis.
+
+| System | Observed status | Evidence | Issue or gap | Action |
+| --- | --- | --- | --- | --- |
+| Authentication (Better Auth, email/password, cookie session) | Implemented but not executed in this iteration | `apps/server/src/app.ts` `createApp` → `betterAuth(...)`, `/api/auth/*` proxy, `authenticate()`; integration test "authenticates securely…" | Needs DB to run. | Run integration suite once Docker works. |
+| Authorization / ownership | Implemented but not executed in this iteration | All mutations resolve the character from the session `userId` (`game.ts` `load`); items checked with `items.find` on the owner's own list; market cancel checks `sellerId` (403) | No cross-account path found by reading. | Covered by existing integration test (not run). |
+| CSRF / origin | Implemented but not executed in this iteration | `onRequest` hook requires `Origin === APP_ORIGIN` for every POST; WS `preValidation` does the same | — | — |
+| Mutation idempotency | Implemented but not executed in this iteration | `mutation()` in `app.ts`: `Idempotency-Key` UUID + request hash stored in `Idempotency` table inside the same transaction | Table grows unbounded **[L]**. | Retention policy in Stage 8. |
+| Concurrency of economic operations | Implemented but not executed in this iteration | `db.ts` `atomic()` takes a global `pg_advisory_xact_lock` for every mutation and state read | Correct but fully serialized; throughput ceiling **[L]** acceptable for a friends-scale game. | Re-evaluate in Stage 8 load test. |
+| WebSocket (presence, chat, refresh) | Implemented but not executed in this iteration | `app.ts` `/api/ws`, `peers` map, 5 s ping/refresh interval cleared `onClose`; client `App.tsx` effect clears interval, timer and socket on cleanup | Server re-validates every session every 5 s and after each mutation (DB load) **[L]**. Client both polls every 5 s and refetches on each `refresh` broadcast (double fetch) **[H]** not a correctness issue. | Revisit in Stage 2 when combat events stream. |
+| Combat & progression | Implemented and verified in this iteration (unit level) | `packages/game-core/src/index.ts` `encounter`, `settleHunt`, `levelForXp`; `pnpm test` → 12/12 pass | Combat is a single precomputed outcome per encounter; skills are passive multipliers, no hotbar/priorities/cooldowns **[F]** (Stage 2). Equip/build change discards the in-progress encounter after settling **[L]**. | Stage 2. |
+| Offline progress | Implemented and verified in this iteration (unit level) | `settleHunt` caps at `config.offlineCapMs` = 8 h; `OFFLINE_CAP_HOURS` env can only lower it (`Math.min`) | V3 target is 24 h **[F]**; intentionally unchanged in Stage 1. | Stage 2. |
+| Inventory & equipment | Implemented but not executed in this iteration | `game.ts` `action` (`equip`/`sell`), one item per slot, listed items locked, `inventoryLimit` 200 with overflow auto-sold in `settleHunt` | — | — |
+| Potions | Implemented but not executed in this iteration | `action('potions')` gold check; auto-use via `potionThreshold` in `encounter` | Max 1 potion per encounter **[L]**. | Stage 2 automation rules. |
+| Market | Implemented but not executed in this iteration | `game.ts` `market`; `MarketListing.itemId @unique`; migration `20261006000001_listing_integrity`; audit row per purchase | Seller can't buy own listing; full inventory blocks purchase. | — |
+| Boss expedition | Implemented but not executed in this iteration | `game.ts` `boss`, `finishBoss`; `BossReward @@id([roomId,characterId])` guarantees single reward; resolves lazily from persisted `endsAt` so it survives restart | **[D] fixed:** a waiting room abandoned by all members stayed joinable with `leaderId=''`, so nobody could start it. No key system, no requirements beyond level 3 **[F]** (Stage 4/5). | Fixed in `ede5a69`; test added. |
+| Restart recovery | Implemented but not executed in this iteration | Hunt state is in `Character.data` (`lastSettledAt`, `encounter`); boss state in `BossRoom.data`; nothing lives only in memory except WS peers | — | — |
+| Schema / migrations | Implemented but not executed in this iteration | `apps/server/prisma/schema.prisma`, 3 migrations | Game state is a JSON blob (`Character.data`) with denormalized `gold/xp/level` columns; no DB CHECK on `gold >= 0` **[H]** risk only if code regresses. | Consider CHECK constraints in Stage 4. |
+| UI text & formatting | Implemented and verified in this iteration (code + build) | `apps/web/src/App.tsx`, `World.tsx` | **[D] fixed:** speed suffix rendered a literal `?` (broken `×`); counts used plural only ("1 itens", "1 minutos", "1 encontros resolvidos"); defense could show non-rounded values. No mojibake or literal escapes found. "Impacto confirmado" no longer exists in source. The `1.276…` value was not reproduced (speed already uses `toFixed(2)`). | Fixed in `ede5a69`. Visual check in browser pending. |
+| Assets | Implemented and verified in this iteration | `pnpm validate:assets` → "11 sheets, dimensions, RGBA and frame indexes" passed | Most classes/monsters still use simple static art **[F]** (Stage 6). Runtime loading in browser not inspected. | Stage 6. |
+| Lint / typecheck / build | Implemented and verified in this iteration | `pnpm lint`, `pnpm typecheck`, `pnpm build` all succeeded | — | — |
+| PostgreSQL integration tests | Blocked by environment or external dependency | Docker engine HTTP 500 | 15 tests (incl. new one) not run. | Run `pnpm test:integration` with a `_test` DB. |
+| E2E (Playwright, two players) | Blocked by environment or external dependency | Needs DB + server | Two-account journey not executed. | Run `pnpm test:e2e`. |
+| CI workflows | Implemented but not executed in this iteration | `.github/workflows/ci.yml` (tests, Playwright, backup restore, gitleaks); `deploy.yml` manual `workflow_dispatch` | — | Will run on the PR. |
+| Infrastructure (CDK) | Implemented and verified in this iteration (synth only) | `pnpm infra:synth` succeeded; `infra/test.ts` 1 test ran | Nothing deployed or provisioned **[L]**. | Stage 8. |
+| Archer class, specializations, keys, Codex | Missing | `ClassId` = `warrior|mage|priest` in `packages/shared/src/index.ts` | **[F]** | Stages 3–5. |

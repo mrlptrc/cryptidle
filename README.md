@@ -12,6 +12,15 @@ Projeto pessoal que une desenvolvimento de jogos, sistemas multiplayer e estudo 
 
 > **Em desenvolvimento:** o núcleo do MVP está implementado. Arte, animações e experiência de combate seguem em evolução. A infraestrutura AWS está definida em código; o deploy não está confirmado na documentação atual.
 
+## V3 status (English)
+
+V3 is the first production release. **Current stage: Stage 1 — audit, rules and stabilization.** Lint, typecheck, unit tests and build pass; the PostgreSQL integration suite and the Playwright two-player journey were not executed in the Stage 1 environment (no disposable database).
+
+- [Baseline audit](docs/v3/BASELINE_AUDIT.md) — verified state of every system
+- [Game rules](docs/v3/GAME_RULES.md) — approved decisions, proposals, current behavior
+- [Delivery plan](docs/v3/DELIVERY_PLAN.md) — the nine V3 stages
+- [Progress](docs/v3/PROGRESS.md) — what is done, pending and blocked
+
 ## O jogo
 
 | Sistema | O que você encontra |
