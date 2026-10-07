@@ -1,14 +1,14 @@
 import { randomBytes, randomUUID } from 'node:crypto';
-import { regions, equipment, skills, config, createCharacter, getStats, settleHunt, startHunt, simulateBoss, levelForXp } from '@cryptidle/game-core';
-import type { Character, Item, BossRoom, GameState, RewardSummary, ClassId, Preparation } from '@cryptidle/shared';
+import { regions, equipment, skills, config, createCharacter, getStats, settleHunt, startHunt, simulateBoss, levelForXp, migrateCharacter, setAutomation, visibleEvents, config as gameConfig } from '@cryptidle/game-core';
+import type { AutomationRule, Character, Item, BossRoom, GameState, RewardSummary, ClassId, Preparation } from '@cryptidle/shared';
 import { json, type Tx } from './db.js';
 export class GameError extends Error { constructor(message: string, public statusCode = 400) { super(message); } }
 export function insist(condition: unknown, message: string, code = 400): asserts condition { if (!condition) throw new GameError(message, code); }
 export const definition = (id: string) => { const def = equipment.find(e => e.id === id); insist(def, 'Equipamento desconhecido'); return def; };
 export async function save(tx: Tx, c: Character) { await tx.character.update({where:{id:c.id},data:{data:json(c),gold:c.gold,xp:c.xp,level:c.level}}); }
-export async function load(tx: Tx, userId: string) { const row = await tx.character.findUnique({where:{userId}}); insist(row, 'Crie um personagem primeiro', 404); return {row, c: row.data as unknown as Character, items: await tx.item.findMany({where:{ownerId:row.id}})}; }
+export async function load(tx: Tx, userId: string) { const row = await tx.character.findUnique({where:{userId}}); insist(row, 'Crie um personagem primeiro', 404); return {row, c: migrateCharacter(row.data as unknown as Character), items: await tx.item.findMany({where:{ownerId:row.id}})}; }
 export async function settle(tx: Tx, c: Character, items: Item[], now: number): Promise<RewardSummary> {
- const result = settleHunt(c, items, now, {offlineCapMs:Number(process.env.OFFLINE_CAP_HOURS || 8)*3600000});
+ const result = settleHunt(c, items, now, {offlineCapMs:process.env.OFFLINE_CAP_HOURS?Number(process.env.OFFLINE_CAP_HOURS)*3600000:gameConfig.offlineCapMs});
  Object.assign(c, result.character);
  for (const definitionId of result.drops) { const item = await tx.item.create({data:{id:randomUUID(),definitionId,ownerId:c.id}}); items.push(item); }
  await save(tx,c);
@@ -45,7 +45,7 @@ export async function state(tx: Tx, userId: string, now: number, summary?: Rewar
  // Do not disclose future random rewards to a client that can stop/restart hunts.
  const monster=regions.find(r=>r.id===c.regionId)?.monsters.find(m=>m.id===c.encounter?.monsterId);
  const maxHp=c.encounter?.monsterMaxHp||monster?.stats.hp||1;
- const visible={...c,huntSeed:0,stats:getStats(c,items),encounter:c.encounter?{...c.encounter,sequence:c.encounter.sequence||c.kills+c.defeats+1,monsterMaxHp:maxHp,monsterHp:c.encounter.monsterHp||Math.max(1,Math.ceil(maxHp*c.encounter.remainingMs/c.encounter.durationMs)),drop:null,xp:0,gold:0,victory:false,hpAfter:c.hp,potionsUsed:0}:null};
+ const visible={...c,huntSeed:0,stats:getStats(c,items),encounter:c.encounter?{...c.encounter,sequence:c.encounter.sequence||c.kills+c.defeats+1,monsterMaxHp:maxHp,monsterHp:c.encounter.monsterHp||Math.max(1,Math.ceil(maxHp*c.encounter.remainingMs/c.encounter.durationMs)),drop:null,xp:0,gold:0,victory:false,hpAfter:c.hp,potionsUsed:0,events:visibleEvents(c.encounter)}:null};
  return {character:visible,items,summary:summary || accrued,room,serverTime:now};
 }
 export async function create(tx: Tx, userId: string, name: string, classId: ClassId, now: number) {
@@ -64,8 +64,8 @@ export async function action(tx: Tx,userId: string,kind: string,body: Record<str
  insist(room?.status !== 'running','Aguarde o fim da expedição');
  if (kind === 'hunt') { insist(!room || room.status!=='waiting','Saia da sala antes de caçar'); insist(body.regionId===null||regions.some(r=>r.id===body.regionId&&c.level>=r.minLevel),'Região indisponível');Object.assign(c, startHunt(c,items,body.regionId as string|null,now)); }
  if (kind === 'build') {
-  const chosen=body.skills as string[]; insist(chosen.every(id=>skills.some(s=>s.id===id&&s.classId===c.classId)),'Habilidade incompatível');
-  c.skills=chosen; c.potionThreshold=body.potionThreshold as number; c.encounter=null;
+  const rules=body.rules as AutomationRule[]; insist(rules.every(r=>skills.some(s=>s.id===r.skillId&&s.classId===c.classId)),'Habilidade incompatível');
+  Object.assign(c,setAutomation(c,rules)); c.potionThreshold=body.potionThreshold as number; c.encounter=null;
  }
  if (kind === 'equip' || kind === 'sell') {
   const item=items.find(i=>i.id===body.itemId); insist(item,'Item não encontrado',404); insist(!item.listed,'Item anunciado está bloqueado');

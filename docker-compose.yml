@@ -35,7 +35,7 @@ services:
       NODE_ENV: ${NODE_ENV:-development}
       WEB_DIST: /app/apps/web/dist
       PORT: 3000
-      OFFLINE_CAP_HOURS: ${OFFLINE_CAP_HOURS:-8}
+      OFFLINE_CAP_HOURS: ${OFFLINE_CAP_HOURS:-24}
       BOSS_COOLDOWN_MINUTES: ${BOSS_COOLDOWN_MINUTES:-15}
     depends_on:
       migrate: {condition: service_completed_successfully}

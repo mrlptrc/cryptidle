@@ -51,12 +51,22 @@ describe.skipIf(!enabled)('PostgreSQL economy and real authentication',()=>{
   expect(first.statusCode,first.body).toBe(200);expect(repeat.json()).toEqual(first.json());
   expect((await request(users[0].cookie,'/api/equip',{itemId:picked.id,equip:false},key)).statusCode).toBe(409);
  });
- it('caps offline at eight hours and liquidates before region/build changes',async()=>{
-  time+=24*3600000;const result=await state(0);expect(result.summary!.elapsedMs).toBe(8*3600000);expect(result.summary!.capped).toBe(true);
+ it('caps offline at 24 hours and liquidates before region/build changes',async()=>{
+  time+=30*3600000;const result=await state(0);expect(result.summary!.elapsedMs).toBe(24*3600000);expect(result.summary!.capped).toBe(true);
   const before=result.character!.xp;time+=120000;
-  const changed=await request(users[0].cookie,'/api/build',{skills:['cleave'],potionThreshold:.5});expect(changed.statusCode,changed.body).toBe(200);expect(changed.json<GameState>().character!.xp).toBeGreaterThanOrEqual(before);
+  const changed=await request(users[0].cookie,'/api/build',{rules:[{skillId:'cleave',condition:{type:'enemy_hp_above',value:.3}}],potionThreshold:.5});expect(changed.statusCode,changed.body).toBe(200);expect(changed.json<GameState>().character!.xp).toBeGreaterThanOrEqual(before);
   const stopped=await request(users[0].cookie,'/api/hunt',{regionId:null});expect(stopped.statusCode).toBe(200);
   const xp=stopped.json<GameState>().character!.xp;time+=3600000;expect((await state(0)).character!.xp).toBe(xp);
+ });
+ it('migrates legacy character data and validates automation rules at the server boundary',async()=>{
+  const row=await prisma.character.findUniqueOrThrow({where:{id:users[2].id}});const legacy={...row.data as unknown as Character};delete legacy.automation;delete legacy.dataVersion;legacy.skills=['firebolt'];
+  await prisma.character.update({where:{id:legacy.id},data:{data:json(legacy)}});
+  const loaded=(await state(2)).character!;expect(loaded.dataVersion).toBe(2);expect(loaded.automation!.rules).toEqual([{skillId:'firebolt',condition:{type:'always'}}]);expect(loaded.xp).toBe(legacy.xp);
+  expect((await request(users[2].cookie,'/api/build',{rules:[{skillId:'cleave',condition:{type:'always'}}],potionThreshold:.4})).statusCode).toBe(400);
+  expect((await request(users[2].cookie,'/api/build',{rules:[{skillId:'haste',condition:{type:'hp_below',value:2}}],potionThreshold:.4})).statusCode).toBe(400);
+  expect((await request(users[2].cookie,'/api/build',{rules:[{skillId:'haste',condition:{type:'always'}},{skillId:'haste',condition:{type:'always'}}],potionThreshold:.4})).statusCode).toBe(400);
+  const ok=await request(users[2].cookie,'/api/build',{rules:[{skillId:'barrier',condition:{type:'hp_below',value:.5}},{skillId:'firebolt',condition:{type:'always'}},{skillId:'haste',condition:{type:'always'}}],potionThreshold:.4});
+  expect(ok.statusCode,ok.body).toBe(200);expect(ok.json<GameState>().character!.skills).toEqual(['barrier','firebolt','haste']);
  });
  it('settles elapsed time with the old equipment before activating new stats',async()=>{
   const strong=await item(0,equipment.find(e=>e.regionId==='crypt'&&e.slot==='weapon')!.id);

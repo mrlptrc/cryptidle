@@ -18,7 +18,7 @@ const uuid=z.string().uuid();
 const schemas={
  character:z.object({name:z.string().trim().min(3).max(20).regex(/^[\p{L}\p{N}_ -]+$/u),classId:z.enum(['warrior','mage','priest'])}),
  hunt:z.object({regionId:z.string().max(60).nullable()}),
- build:z.object({skills:z.array(z.string().max(60)).max(2).refine(a=>new Set(a).size===a.length),potionThreshold:z.number().min(0).max(1)}),
+ build:z.object({rules:z.array(z.object({skillId:z.string().max(60),condition:z.discriminatedUnion('type',[z.object({type:z.literal('always')}),z.object({type:z.enum(['hp_below','enemy_hp_above']),value:z.number().min(.05).max(.95)})])})).max(config.hotbarSlots).refine(a=>new Set(a.map(r=>r.skillId)).size===a.length),potionThreshold:z.number().min(0).max(1)}),
  equip:z.object({itemId:uuid,equip:z.boolean()}),sell:z.object({itemId:uuid}),
  potions:z.object({quantity:z.number().int().min(1).max(100)}),skin:z.object({skin:z.union([z.literal(0),z.literal(1)])}),
  list:z.object({itemId:uuid,price:z.number().int().min(1).max(1000000)}),

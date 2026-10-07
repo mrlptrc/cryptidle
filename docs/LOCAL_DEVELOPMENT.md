@@ -24,6 +24,6 @@ Assets: `python assets/generate_sprites.py` recompõe spritesheets/ícones progr
 - Porta 3000 ocupada: pare o outro servidor. Vite usa proxy `/api` e WebSocket para ela.
 - Browser sem sprites: confira arquivos em `apps/web/public/art` e caminhos `/art/*`.
 - WebSocket exige mesma origem e sessão válida. Vite proxy encaminha WSS/dev WS.
-- `OFFLINE_CAP_HOURS` pode reduzir o teto, máximo 8 horas.
+- `OFFLINE_CAP_HOURS` pode reduzir o teto, máximo 24 horas.
 - `docker version` deve mostrar Server ativo; cliente instalado sozinho não inicia Compose.
 - Não coloque cookies, senhas, tokens, payloads de login ou connection strings em issue/log compartilhado.
