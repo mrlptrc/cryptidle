@@ -109,6 +109,7 @@ def main() -> None:
     ap.add_argument("--frames", type=int, help="poses to use, in reading order (default: all cells)")
     ap.add_argument("--height", type=int, default=120, help="target actor height in px for this action's tallest pose")
     ap.add_argument("--scale-from", type=Path, help="reuse the scale of an approved action JSON so all actions share one body size")
+    ap.add_argument("--scale", type=float, help="fixed scale; use 1 for sprites already at native pixel size (e.g. PixelLab)")
     ap.add_argument("--key", help="background key colour as hex (default: sampled from corners)")
     ap.add_argument("--tolerance", type=int, default=90)
     ap.add_argument("--colors", type=int, default=48)
@@ -149,7 +150,9 @@ def main() -> None:
         cells.append((cell, box, specks))
 
     tallest = max(b[3] - b[1] for _, b, _ in cells)
-    if args.scale_from:
+    if args.scale:
+        scale = args.scale
+    elif args.scale_from:
         scale = json.loads(args.scale_from.read_text())["sourceScale"]
     else:
         scale = args.height / tallest

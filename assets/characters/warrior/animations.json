@@ -1,13 +1,16 @@
 {
   "schema_version": 1,
   "actor": "warrior",
-  "status": "specification_only",
+  "status": "draft",
   "runtime_ready": false,
   "frame_size_proposal": [
     192,
     192
   ],
-  "pivot": null,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.8958333333333334
+  },
   "directions": [
     "right",
     "left"
@@ -16,26 +19,74 @@
     "idle": {
       "target_frame_count": 6,
       "loop": true,
-      "texture": null,
-      "frames": [],
-      "durations_ms": [],
+      "texture": "characters/warrior/sheets/idle.png",
+      "frames": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "durations_ms": [
+        200,
+        200,
+        200,
+        200
+      ],
       "impact_frame": null
     },
     "walk": {
       "target_frame_count": 8,
       "loop": true,
-      "texture": null,
-      "frames": [],
-      "durations_ms": [],
+      "texture": "characters/warrior/sheets/walk.png",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations_ms": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
       "impact_frame": null
     },
     "attack": {
       "target_frame_count": 8,
       "loop": false,
-      "texture": null,
-      "frames": [],
-      "durations_ms": [],
-      "impact_frame": null
+      "texture": "characters/warrior/sheets/attack.png",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "durations_ms": [
+        83,
+        83,
+        83,
+        83,
+        83,
+        83,
+        83,
+        83,
+        83
+      ],
+      "impact_frame": 4
     },
     "skill": {
       "target_frame_count": 8,
@@ -61,5 +112,9 @@
       "durations_ms": [],
       "impact_frame": null
     }
-  }
+  },
+  "frame_size": [
+    192,
+    192
+  ]
 }

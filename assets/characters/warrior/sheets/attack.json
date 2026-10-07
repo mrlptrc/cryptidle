@@ -1,0 +1,139 @@
+{
+  "actor": "warrior",
+  "action": "attack",
+  "texture": "characters/warrior/sheets/attack.png",
+  "frameWidth": 192,
+  "frameHeight": 192,
+  "frames": 9,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.8958333333333334
+  },
+  "durations_ms": [
+    83,
+    83,
+    83,
+    83,
+    83,
+    83,
+    83,
+    83,
+    83
+  ],
+  "loop": false,
+  "impact_frame": 4,
+  "sourceScale": 1.0,
+  "backgroundKey": "alpha",
+  "status": "draft",
+  "report": [
+    {
+      "frame": 0,
+      "sourceBox": [
+        41,
+        26,
+        108,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 1,
+      "sourceBox": [
+        41,
+        26,
+        96,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.5,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 2,
+      "sourceBox": [
+        41,
+        26,
+        99,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.1,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 3,
+      "sourceBox": [
+        19,
+        27,
+        103,
+        150
+      ],
+      "actorHeight": 123,
+      "feetX": 96.0,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 4,
+      "sourceBox": [
+        20,
+        28,
+        105,
+        150
+      ],
+      "actorHeight": 122,
+      "feetX": 96.0,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 5,
+      "sourceBox": [
+        20,
+        28,
+        103,
+        150
+      ],
+      "actorHeight": 122,
+      "feetX": 96.0,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 6,
+      "sourceBox": [
+        35,
+        26,
+        101,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.0,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 7,
+      "sourceBox": [
+        41,
+        26,
+        96,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 8,
+      "sourceBox": [
+        41,
+        26,
+        108,
+        150
+      ],
+      "actorHeight": 124,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    }
+  ],
+  "warnings": []
+}

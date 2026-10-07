@@ -174,7 +174,7 @@
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.east.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/east.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "53d9f489d38b2d12af7b0ad1e9800949ad4827a4bba13e923829062d09912248",
@@ -185,12 +185,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.north-east.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/north-east.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "598f872013d29b77715725403006b83e06c5a1605f2757443ce32c139991ccd7",
@@ -201,12 +202,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.north-west.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/north-west.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "9aad0325d0fbfedb6b1ccebd39a911cc61336f274573a21d4c7c0fe0c7d97a32",
@@ -217,12 +219,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.north.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/north.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "f699cd77ace9a4a8962cd6213f2a43abc0ba9a8568f3b90687f86c2c2e4b209f",
@@ -233,12 +236,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.south-east.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/south-east.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "605c4324d15c0b1c9defbe9615b36b10fce03dfb3c7bf447162bbc15e3ff731d",
@@ -249,12 +253,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.south-west.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/south-west.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "b0ab4af529f363712f04fe2e9ef5edf0b7fa9169900506844163023286c3df29",
@@ -265,12 +270,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.south.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/south.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "0ba2a8be441ac9c00bafb74214ca7452243347245aca0255c98e2686d5fd5b47",
@@ -281,12 +287,13 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
     },
     {
       "id": "characters.warrior.frames.pixellab-v3-rotations.west.png",
       "path": "characters/warrior/frames/pixellab-v3-rotations/west.png",
-      "status": "draft",
+      "status": "approved",
       "runtime_ready": false,
       "origin": "PixelLab create_character mode=v3 (character ea38cea6-ce1e-4678-8f63-49ad2763f13c), reference = Warrior cropped from references/concepts/four-classes-lineup.png, 2026-10-07",
       "sha256": "7fd8c86b5a2bcdbd2130bf60eb0c9fb8a0b30dc218aded0fdd1f6ab637cacd40",
@@ -297,7 +304,32 @@
         0,
         255
       ],
-      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png"
+      "notes": "Static rotation (one pose per direction), not animation. Preview: previews/warrior-pixellab-v3-rotations.png",
+      "approval": "Owner approved the PixelLab Warrior model on 2026-10-07 (\"eu aprovo ficou bom\"); profile right (east) chosen for combat."
+    },
+    {
+      "id": "characters.warrior.sheets.idle",
+      "path": "characters/warrior/sheets/idle.png",
+      "status": "draft",
+      "runtime_ready": false,
+      "origin": "PixelLab template breathing-idle, east, 4 frames; packed by tools/gpt_sprite_pipeline.py --scale 1",
+      "notes": "Consistent identity and feet; pending owner review of GIF."
+    },
+    {
+      "id": "characters.warrior.sheets.walk",
+      "path": "characters/warrior/sheets/walk.png",
+      "status": "draft",
+      "runtime_ready": false,
+      "origin": "PixelLab template walking-8-frames, east, 8 frames; packed by tools/gpt_sprite_pipeline.py --scale 1",
+      "notes": "Consistent identity and feet; pending owner review of GIF."
+    },
+    {
+      "id": "characters.warrior.sheets.attack",
+      "path": "characters/warrior/sheets/attack.png",
+      "status": "rejected",
+      "runtime_ready": false,
+      "origin": "PixelLab v3 custom attack, east, start/end frame = east rotation (3rd attempt)",
+      "notes": "Rejected: mid frames turn toward the camera and the sword swings backward. Kept only as evidence; needs a new approach."
     }
   ]
 }
