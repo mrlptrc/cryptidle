@@ -26,3 +26,9 @@ Ataque tem animação de pose, deslocamento e arco luminoso. Dano e cura flutuan
 ## Verificação e limitações
 
 Sheets usam grade fixa sem atlas trim, evitando mudanças de pivô. Inspeção dos arquivos town e warrior confirmou cenário independente e transparência da sheet. A inspeção browser e screenshots finais são registradas em `docs/evidence` pelo fluxo de validação. Os cenários têm densidade de pixels mais alta que os atores de 32×48; uma futura passagem manual de pixel art pode uniformizar essa densidade. Animação de ataque comunica atividade contínua; não é um replay exato de cada golpe do servidor, que resolve encontros completos.
+
+## Segunda rodada: cena 2D pixelada
+
+Na cena jogável o Guerreiro e o morcego do Bosque das Cinzas usam folhas RGBA originais de **96×144 por célula**, seis quadros por ação, filtro nearest-neighbour e pivô fixo no centro inferior. As folhas ficam separadas por ação (`idle`, `walk`/`move`, `attack`, `skill`, `hurt`, `death`) para que os efeitos não alterem permanentemente a posição do ator. A animação é desenhada em camadas de contorno, aço, tecido e brilho, mantendo silhuetas legíveis quando ampliada.
+
+O Phaser e o canvas usam renderização pixelada; o fundo continua sendo o cenário panorâmico existente, enquanto atores, sombras e efeitos são objetos 2D independentes. A geração reproduzível está em `assets/generate_detailed_sprites.py`; a procedência e os arquivos estão em `assets/manifest.json`. Esta rodada cobre a cena de referência Guerreiro + Bosque das Cinzas; as outras classes e regiões continuam com os sheets anteriores até uma passagem específica.

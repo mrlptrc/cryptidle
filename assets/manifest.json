@@ -153,5 +153,22 @@
       "scope": "Guerreiro base skin and the three Bosque das Cinzas monsters. Other class/region sprites retain MVP sheets pending the next art pass."
     }
   ],
+  "combatSpriteSheets": {
+    "cell": "96x144 RGBA, nearest-neighbour, fixed baseline",
+    "warrior": {
+      "files": ["apps/web/public/art/warrior-forest-idle.png", "apps/web/public/art/warrior-forest-walk.png", "apps/web/public/art/warrior-forest-attack.png", "apps/web/public/art/warrior-forest-skill.png", "apps/web/public/art/warrior-forest-hurt.png", "apps/web/public/art/warrior-forest-death.png"],
+      "framesPerAction": 6,
+      "source": "Original deterministic Pillow drawing in assets/generate_detailed_sprites.py",
+      "license": "Original project asset; final project license remains owner decision",
+      "scope": "Warrior base skin in Bosque das Cinzas"
+    },
+    "bat": {
+      "files": ["apps/web/public/art/bat-forest-idle.png", "apps/web/public/art/bat-forest-move.png", "apps/web/public/art/bat-forest-attack.png", "apps/web/public/art/bat-forest-hurt.png", "apps/web/public/art/bat-forest-death.png"],
+      "framesPerAction": 6,
+      "source": "Original deterministic Pillow drawing in assets/generate_detailed_sprites.py",
+      "license": "Original project asset; final project license remains owner decision",
+      "scope": "Ash Grove bat encounter"
+    }
+  },
   "temporaryPlaceholders": []
 }
