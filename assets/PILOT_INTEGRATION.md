@@ -57,7 +57,7 @@ Prepared, not started: there are no real frames to integrate yet.
    Order: idle 6, walk 8, attack 8; then skill, hurt, death and the left direction. Do not mirror
    blindly, because the shield and sword hands matter. Bat: flight/idle, move, attack, hurt, death; the shadow is separate.
    Put frames in `characters/<actor>/frames/`, untouched.
-2. **Assembly (tooling allowed).** Pack frames into sheets in `characters/<actor>/sheets/`
+2. **Assembly (tooling allowed).** With ChatGPT output, follow `prompts/GPT_SPRITE_GUIDE.md` and run `pnpm art:process` (`tools/gpt_sprite_pipeline.py`). Otherwise: Pack frames into sheets in `characters/<actor>/sheets/`
    and fill `texture`, `frames`, `durations_ms`, `impact_frame` and `pivot` in `animations.json`.
    Tooling may only assemble and validate. It must not invent in-between poses.
 3. **Validation.** Extend `assets/validate_combat_sprites.py` to the 192×192 cell and to the
