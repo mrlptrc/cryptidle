@@ -5,6 +5,16 @@ Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
 This file has NOT been independently verified against the current branch or CI.
 Merge with newer repository records; do not overwrite newer evidence.
 
+## Update — 2026-10-07 (Warrior art pilot)
+- Branch / commit: feat/v3-art-kit-import @ d8de8ab, PR #4. CI passed: https://github.com/mrlptrc/cryptidle/actions/runs/37654643660
+- The owner provided references/concepts/four-classes-lineup.png (ChatGPT) as the class look.
+- PixelLab (character ea38cea6-ce1e-4678-8f63-49ad2763f13c, v3 from the lineup Warrior) produced 8 rotations; the owner approved the model and chose the right-facing profile (east).
+- idle (breathing-idle, 4f) and walk (walking-8-frames, 8f) were packed at native scale and are now used in game as /art/warrior-v2-*.png (192×192, pivotY 172/192). Other Warrior actions keep the procedural fallback.
+- Attack: 3 PixelLab attempts rejected (the character turns toward the camera mid-swing). The owner will draw it in Aseprite per the frame plan given in chat (6 frames, 12 fps, impact on 4, 192×192, feet y=172), then run `pnpm art:process`.
+- Fixed: World.animate resolved animations from the swapped texture key, so actors stopped animating after their first action; it now uses the actor's base key.
+- PixelLab budget: 23 of 40 trial generations left.
+- Not verified: the in-game hunt scene with the new sprites (needs the server and a DB); only /dev/animations was screenshotted (docs/evidence/warrior-v2-*-preview.png).
+
 ## Update — 2026-10-07 (art kit import, before Stage 3)
 - Authorized task: integrate cryptidle-art-kit per assets/IMPORT_INSTRUCTIONS.md and assets/AGENTS.md.
 - Branch / commit: feat/v3-art-kit-import (stacked on feat/v3-stage2-auto-combat), commit 0b48ca8.
