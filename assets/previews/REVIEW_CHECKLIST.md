@@ -1,0 +1,15 @@
+# Review checklist
+- [ ] Owner accepted the character model and scene composition.
+- [ ] Viewed at actual game scale on light, dark and environment backgrounds.
+- [ ] Alpha has no checkerboard, colored matte or unwanted halo.
+- [ ] Direction and anatomical weapon hands checked.
+- [ ] Frames keep face, proportions, palette and equipment consistent.
+- [ ] Sword, cape and wings never clipped.
+- [ ] Feet and pivot stay stable except intentional movement.
+- [ ] Walk uses real poses and does not slide.
+- [ ] Attack contact is readable at game speed.
+- [ ] Last-to-first transition checked for looping actions.
+- [ ] Shadow remains grounded for flying actors.
+- [ ] Metadata ranges and durations match actual files.
+- [ ] Integration uses authoritative server events.
+- [ ] Screenshot and animation evidence recorded.

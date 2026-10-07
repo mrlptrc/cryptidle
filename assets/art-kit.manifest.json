@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "package": "cryptidle-art-kit",
+  "snapshot_date": "2026-10-07",
+  "status": "reference_and_specification_package",
+  "note": "Do not replace project manifest.json. No production animations included.",
+  "assets": [
+    {
+      "id": "references.concepts.cryptidle-class-board.png",
+      "path": "references/concepts/cryptidle-class-board.png",
+      "status": "draft",
+      "runtime_ready": false,
+      "origin": "Generated in this conversation; concept reference, not approved production art",
+      "sha256": "30e37bca88d1b7c5e9fbb8c992c01f3689234ace9d5b4b41765abef80c9990e9",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_extrema": null
+    },
+    {
+      "id": "characters.warrior.reference.png",
+      "path": "characters/warrior/reference.png",
+      "status": "draft",
+      "runtime_ready": false,
+      "origin": "Generated from class board; direction and alpha cleanup pending",
+      "sha256": "53a5cc69ba32af475ca53056769173ba442efe0692d2fa17d0889ff8075c31f9",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ]
+    },
+    {
+      "id": "environments.town.reference.png",
+      "path": "environments/town/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: apps/web/public/art/town.png; destination is an organizational label, verify current mapping",
+      "sha256": "88272a03ef35645fc577d24014d5c51bf36d3f7dcea0b4453ece6df43a4b63db",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_extrema": null
+    },
+    {
+      "id": "environments.forest.reference.png",
+      "path": "environments/forest/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: apps/web/public/art/forest.png; destination is an organizational label, verify current mapping",
+      "sha256": "618f090010c7d26954252e747213b5c8a55fc7c01d322d9d040a6b994c0ee140",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_extrema": null
+    },
+    {
+      "id": "environments.swamp.reference.png",
+      "path": "environments/swamp/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: apps/web/public/art/citadel.png; destination is an organizational label, verify current mapping",
+      "sha256": "df2577e1844f35d265a60208c2832cbc5362c08d7461c9ce8ed3e60c26613661",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_extrema": null
+    },
+    {
+      "id": "environments.crypt.reference.png",
+      "path": "environments/crypt/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: apps/web/public/art/crypt.png; destination is an organizational label, verify current mapping",
+      "sha256": "8933bc6ba673540e527eac3d63f5c1837a21573313c374f2a5dd5a310d3c54e1",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "alpha_extrema": null
+    },
+    {
+      "id": "monsters.shadow-bat.reference.png",
+      "path": "monsters/shadow-bat/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: forest-bat.png",
+      "sha256": "00a95d263869469f42459a70f58f4a660345b23f948e5cc87a527b7af8602207",
+      "width": 640,
+      "height": 112,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "monsters.crypt-rat.reference.png",
+      "path": "monsters/crypt-rat/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: forest-rat.png",
+      "sha256": "9d27f9a4753bda2e72baf474280346e0066b19453015d59ac58dbe81fadd2e03",
+      "width": 640,
+      "height": 112,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "monsters.forest-slime.reference.png",
+      "path": "monsters/forest-slime/reference.png",
+      "status": "existing_reference",
+      "runtime_ready": false,
+      "origin": "Repository 52c4013: forest-slime.png",
+      "sha256": "e343a98d3d041e67d8a8e1da6951aa20e81d65502f32a9091e4937c95b65d672",
+      "width": 640,
+      "height": 112,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "references.rejected.block-warrior.png",
+      "path": "references/rejected/block-warrior.png",
+      "status": "negative_reference",
+      "runtime_ready": false,
+      "origin": "Previous repository placeholder; illustrates undesired low detail",
+      "sha256": "d5869d7af08541c6be4a31dcb44e2bea42666aaec00b6c452c6de6eda661ec8a",
+      "width": 384,
+      "height": 48,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "references.rejected.block-mage.png",
+      "path": "references/rejected/block-mage.png",
+      "status": "negative_reference",
+      "runtime_ready": false,
+      "origin": "Previous repository placeholder; illustrates undesired low detail",
+      "sha256": "223bb73d36a91085243da924fc50c935d5f6ecc30abfdcfdd4cdb0a4f7c5bacc",
+      "width": 384,
+      "height": 48,
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    }
+  ]
+}
