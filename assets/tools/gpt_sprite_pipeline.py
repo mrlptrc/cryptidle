@@ -31,6 +31,12 @@ def chroma_key(im: Image.Image, key: tuple[int, int, int] | None, tol: int) -> t
     im = im.convert("RGBA")
     w, h = im.size
     px = im.load()
+    if key is None and all(px[x, y][3] == 0 for x, y in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))):
+        # Already transparent: just binarize alpha (GPT exports leave a faint halo below 128).
+        alpha = im.getchannel("A").point(lambda a: 255 if a >= 128 else 0)
+        out = im.copy()
+        out.putalpha(alpha)
+        return out, None  # type: ignore[return-value]
     if key is None:  # sample the four corners; the prompt asks for a flat key colour
         samples = [px[x, y][:3] for x, y in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))]
         key = tuple(int(statistics.median(c[i] for c in samples)) for i in range(3))  # type: ignore[assignment]
@@ -124,7 +130,7 @@ def main() -> None:
 
     key = tuple(int(args.key.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)) if args.key else None
     keyed, key = chroma_key(Image.open(args.raw), key, args.tolerance)  # type: ignore[arg-type]
-    if max(key) - min(key) < 80 and not args.allow_neutral_key:
+    if key is not None and max(key) - min(key) < 80 and not args.allow_neutral_key:
         raise SystemExit(f"background key #{'%02x%02x%02x' % key} is dark/grey/white: keying it would erase outlines and shadows. Regenerate on flat #FF00FF (or pass --allow-neutral-key)")
     border = [keyed.getpixel((x, y))[3] for x in range(0, keyed.width, 4) for y in (0, keyed.height - 1)] + [keyed.getpixel((x, y))[3] for y in range(0, keyed.height, 4) for x in (0, keyed.width - 1)]
     if sum(1 for a in border if a) > len(border) * 0.05:
@@ -177,7 +183,7 @@ def main() -> None:
     duration = round(1000 / args.fps)
     meta = {"actor": args.actor, "action": args.action, "texture": sheet_path.relative_to(root).as_posix(), "frameWidth": CELL, "frameHeight": CELL,
             "frames": count, "pivot": {"x": PIVOT[0] / CELL, "y": PIVOT[1] / CELL}, "durations_ms": [duration] * count, "loop": args.loop,
-            "impact_frame": args.impact_frame, "sourceScale": scale, "backgroundKey": "#%02x%02x%02x" % key, "status": "draft",
+            "impact_frame": args.impact_frame, "sourceScale": scale, "backgroundKey": ("#%02x%02x%02x" % key) if key else "alpha", "status": "draft",
             "report": report, "warnings": warnings}
     (sheets_dir / f"{args.action}.json").write_text(json.dumps(meta, indent=2) + "\n")
 
@@ -206,7 +212,7 @@ def main() -> None:
         spec["runtime_ready"] = False
         spec_path.write_text(json.dumps(spec, indent=2) + "\n")
 
-    print(f"{sheet_path.relative_to(root)}: {count} frames, scale {scale:.4f}, key #{'%02x%02x%02x' % key}")
+    print(f"{sheet_path.relative_to(root)}: {count} frames, scale {scale:.4f}, background {meta['backgroundKey']}")
     for w in warnings:
         print("WARNING:", w)
     print("Review sheets/%s-preview.png and .gif before marking anything approved." % args.action)

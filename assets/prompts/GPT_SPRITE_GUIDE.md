@@ -6,6 +6,11 @@ soft images. This guide makes the generation predictable, and
 `assets/tools/gpt_sprite_pipeline.py` does the technical part (keying, scaling, pixel cleanup,
 pivot alignment, packing, checks, previews). The tool never invents poses.
 
+## Already transparent images
+If ChatGPT returns a PNG with real transparency (like `references/concepts/four-classes-lineup.png`),
+the tool detects it and only removes the faint halo; magenta is not required then.
+The magenta rule below is for images that come back with any background.
+
 ## Golden rules for every request
 1. **One approved model, attached every time.** Generate the character model first; once
    the owner approves it, attach that image (and the class board) to every later request in the same chat.
@@ -20,11 +25,11 @@ pivot alignment, packing, checks, previews). The tool never invents poses.
 
 ## 1. Character model (once per class)
 ```
-Attached: the Cryptidle class board. Draw ONLY the [Warrior] from it as one full-body
+Attached: the Cryptidle four-classes lineup. Draw ONLY the [Warrior] from it as one full-body
 game sprite model: chibi proportions about 3 heads tall, detailed dark-fantasy pixel art
 with clean pixel clusters and a dark outline. Facing RIGHT in a slightly elevated
-three-quarter view. [Warrior: chestnut messy hair, layered steel armor, brown leather straps,
-burgundy scarf and cape, sword in his right hand, round-top heater shield on his left arm.]
+three-quarter view. [Warrior: dark brown spiky hair, burgundy scarf, steel plates over brown leather,
+short sword in his right hand, round wooden shield with a gold cross on his left arm.]
 Neutral idle stance, feet on the ground, whole body and weapon visible with margin.
 Background: perfectly flat solid magenta #FF00FF, no gradient, no glow, no floor,
 no shadow, no text, no border. Single character centered.
