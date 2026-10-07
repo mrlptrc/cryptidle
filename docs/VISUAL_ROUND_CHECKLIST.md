@@ -1,12 +1,14 @@
-# Rodada visual 2 — checklist
+# Rodada visual 2 — checklist de estado
 
-- [x] Inspecionar instruções, cena Phaser, contrato de estado, regras de combate, interface e comandos existentes.
-- [x] Produzir e inspecionar o atlas de referência; cortar quatro sheets RGBA fixos (4 frames de 160×112) e verificar transparência e pivôs.
-- [x] Produzir e inspecionar folhas 2D pixel art detalhadas do Guerreiro e morcego (96×144, 6 quadros por ação, RGBA transparente).
-- [x] Expor sequence e HP do monstro calculados pelo servidor; animações e texto de dano observam mudanças de estado retornadas, sem conceder recompensas no frontend.
-- [x] Melhorar leitura do encontro, feedback de habilidade ativa, histórico limitado, legibilidade, notificações e inventário em grade com comparação e ações existentes.
-- [x] Aplicar a cena Phaser reutilizável; folhas novas integradas ao Guerreiro e morcego do Bosque das Cinzas, com sombra de contato e ações separadas.
-- [x] Ativar renderização nearest-neighbour no canvas para manter leitura pixelada ao ampliar a cena.
-- [x] Typecheck, lint, build, 11 testes do núcleo, 14 testes PostgreSQL e `git diff --check` passaram.
-- [ ] Conferência visual da página a 1366×768, 1920×1080 e 390×844; 2 minutos de caça; abrir/fechar inventário, equipar/desequipar, trocar região, parar/retomar, recarregar e retornar de aba inativa. O navegador recusou acesso automatizado a localhost, então essas verificações estão pendentes.
-- [x] Atualizar manifest e documentação do padrão; screenshots “depois” não puderam ser capturados porque o navegador bloqueou localhost. As folhas novas foram inspecionadas diretamente.
+- [x] Inspecionar instruções, cena Phaser, contrato do servidor, assets, interface e comandos.
+- [x] Adicionar sequence e HP servidos para o encontro e mostrar diferenças reais de HP.
+- [x] Adicionar folhas procedurais Warrior/Morcego, rota de prévia, metadados básicos e validador.
+- [x] Corrigir textura-base ausente para a dupla e escala/deslocamento de quadro na prévia.
+- [x] Typecheck, lint, build, 12 testes do núcleo, validador dos sprites e `git diff --check` passaram nesta revisão.
+- [x] Abrir a prévia em Chromium/Playwright a 1366×768 e testar seleção de ação, pausa e avanço de quadro.
+- [ ] Validar a caça autenticada por dois minutos, inventário/equipar, parar/retomar, troca de região, reload e aba inativa.
+- [ ] Inspecionar cena de caça a 1366×768 e 1920×1080; validar viewport móvel.
+- [ ] Rever arte e ciclos: detalhe, poses de dano/morte, direção oposta, ataque distinto de habilidade e sombras separadas ainda estão abaixo do pedido.
+- [ ] Inspecionar console da cena Phaser e capturar screenshot real da caça.
+
+Para os desvios e evidências completos, veja `docs/VISUAL_ROUND_AUDIT.md`.

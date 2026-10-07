@@ -1,5 +1,7 @@
 # Rodada visual 2
 
+> Revisão de conformidade mais recente: `docs/VISUAL_ROUND_AUDIT.md`. Ela substitui afirmações de conclusão visual deste relato histórico e registra validações feitas após a implementação inicial.
+
 ## Leitura do código existente
 
 - A cena Phaser já era montada uma vez e recebia o estado React por `ref`, mas animava uma troca genérica entre jogador e monstro a cada 2,3 s. Isso não correspondia a golpes observados no servidor.
@@ -23,4 +25,4 @@ As outras classes e regiões ainda usam sprites programáticos de baixa resoluç
 
 ## Prévia e validação de folhas
 
-Em desenvolvimento, `/dev/animations` mostra Guerreiro ou Morcego, ação, direção espelhada para protótipo, velocidade, fundos claro/escuro/Bosque, grade, pivô, pausa e avanço de quadro. `apps/web/src/combatAssets.ts` é o contrato visual; `pnpm validate:assets` verifica existência, RGBA, dimensões e quantidade mínima de quadros. Os sheets desta entrega usam seis quadros em células 96×144, uma escala deliberada para preservar silhueta e evitar ampliar blocos do MVP.
+Em desenvolvimento, `/dev/animations` mostra Guerreiro ou Morcego, ação, direção espelhada para protótipo, velocidade, fundos claro/escuro/Bosque, grade, pivô, pausa e avanço de quadro. `apps/web/src/combatAssets.ts` é o contrato visual; `pnpm validate:assets` verifica existência, RGBA, dimensões e quantidade mínima de quadros. Os sheets desta entrega usam seis quadros em células 112×144, uma escala deliberada para preservar silhueta e evitar ampliar blocos do MVP.

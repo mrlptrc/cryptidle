@@ -9,17 +9,16 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1] / "apps/web/public/art"
 ROOT.mkdir(parents=True, exist_ok=True)
-OUT = (96, 144)
+OUT = (112, 144)
 INK = "#171b27"; SHADE = "#293445"; STEEL = "#8198a6"; HI = "#c7d2cc"
 LEATHER = "#624438"; BURG = "#8f3f4e"; SKIN = "#d8a47f"; GOLD = "#d7b866"
 
 def warrior(frame, action):
     im = Image.new("RGBA", OUT); d = ImageDraw.Draw(im)
     bob = [0, -2, 0, 1, 0, 2][frame]
-    cx = 47 + ([0, 1, 0, -1, 1, 0][frame] if action == "walk" else 0)
+    cx = 51 + ([0, 1, 0, -1, 1, 0][frame] if action == "walk" else 0)
     base = 125 + bob
     # contact shadow stays fixed across every action
-    d.ellipse((18, 128, 78, 138), fill=(8, 12, 16, 125))
     # cape silhouette and folds
     cape = [(cx-22, 49+bob), (cx+16, 47+bob), (cx+36, 69+bob), (cx+29, 114+bob), (cx+3, 98+bob)]
     d.polygon(cape, fill=INK); d.polygon([(x-2, y+2) for x,y in cape], fill=BURG)
@@ -46,16 +45,17 @@ def warrior(frame, action):
     d.polygon([(cx-29, 61+bob), (cx-16, 65+bob), (cx-17, 89+bob), (cx-25, 97+bob), (cx-31, 87+bob)], fill="#4a6079")
     d.line((cx-25, 67+bob, cx-25, 91+bob), fill=GOLD, width=2); d.line((cx-30, 78+bob, cx-20, 78+bob), fill=GOLD, width=2)
     # sword angle changes during attack/skill
-    angle = [(cx+22, 57, cx+43, 94), (cx+24, 60, cx+49, 87), (cx+18, 72, cx+49, 40), (cx+15, 82, cx+52, 56), (cx+23, 55, cx+43, 25), (cx+21, 65, cx+50, 25)][frame] if action in ("attack", "skill") else (cx+23, 62, cx+47, 100)
+    attack_angles=[(cx+22,57,cx+43,94),(cx+24,60,cx+49,87),(cx+18,72,cx+49,40),(cx+15,82,cx+52,56),(cx+23,55,cx+43,25),(cx+21,65,cx+50,25)]
+    skill_angles=[(cx+18,82,cx+38,101),(cx+18,61,cx+23,24),(cx+15,43,cx+41,19),(cx+15,55,cx+50,84),(cx+19,70,cx+49,101),(cx+22,63,cx+44,97)]
+    angle=(skill_angles if action=="skill" else attack_angles)[frame] if action in ("attack","skill") else (cx+23,62,cx+47,100)
     x1,y1,x2,y2=angle; d.line((x1,y1+bob,x2,y2+bob), fill=INK, width=8); d.line((x1,y1+bob,x2,y2+bob), fill=HI, width=4); d.line((x1-4,y1+bob+2,x1+7,y1+bob+7), fill=GOLD, width=4)
-    if action == "skill": d.arc((cx-2, 26+bob, cx+72, 112+bob), 200, 330, fill="#f4c870", width=3)
     if action == "hurt": d.line((cx-22, 40+bob, cx+25, 98+bob), fill="#c55e64", width=3)
     if action == "death": d.polygon([(cx-20, 101+bob), (cx+28, 112+bob), (cx+23, 127+bob), (cx-30, 127+bob)], fill=SHADE)
     return im
 
 def bat(frame, action):
     im=Image.new("RGBA",OUT); d=ImageDraw.Draw(im); bob=[0,-4,-2,2,4,1][frame]
-    cx,cy=48,65+bob; d.ellipse((18,120,78,130),fill=(8,12,16,100))
+    cx,cy=56,65+bob
     wing=([(cx-10,cy-8),(cx-43,cy-33),(cx-34,cy+8),(cx-17,cy+18)] if frame%2 else [(cx-10,cy-8),(cx-47,cy-12),(cx-30,cy+20),(cx-15,cy+18)])
     wing2=[(2*cx-x, y) for x,y in wing]
     d.polygon(wing,fill=INK); d.polygon(wing2,fill=INK)
@@ -70,8 +70,9 @@ def bat(frame, action):
     return im
 
 def sheet(kind, action):
-    out=Image.new("RGBA",(96*6,144))
-    for i in range(6): out.alpha_composite(warrior(i,action) if kind=="warrior" else bat(i,action),(i*96,0))
+    count=3 if action=="hurt" else 6
+    out=Image.new("RGBA",(112*count,144))
+    for i in range(count): out.alpha_composite(warrior(i,action) if kind=="warrior" else bat(i,action),(i*112,0))
     out.save(ROOT/f"{kind}-forest-{action}.png")
 
 for kind, actions in (("warrior",("idle","walk","attack","skill","hurt","death")),("bat",("idle","move","attack","hurt","death"))):
