@@ -1,88 +1,106 @@
-# Cryptidle V3 Delivery Plan
+# Cryptidle V3 — delivery plan
 
-Each stage ends with a PR reviewed by the owner; no stage starts automatically. Numbers (levels, prices, rates, durations) are decided per stage, never assumed.
+Execute one authorized delivery at a time. A listed stage is a roadmap, not permission
+to implement every stage. A stage is complete only when its acceptance gates pass.
 
-## Stage 1 — Audit, rules and stabilization
-- **Goal:** verified picture of the current base; fix confirmed defects.
-- **Dependencies:** none.
-- **Scope:** `docs/v3/*`, small fixes to existing systems, tests for real defects.
-- **Exclusions:** new systems, offline cap change, art replacement.
-- **Planned migrations:** none.
-- **Done when:** audit complete; confirmed defects fixed; lint/typecheck/build/unit pass; integration and E2E pass on a disposable DB.
-- **Required tests:** existing suites plus a regression test per integrity defect.
-- **Pending decisions:** none blocking.
+## 1. Baseline audit and stabilization — current
+Dependencies: current checkout and access to an isolated verification environment.
+Scope: inspect existing systems; fix confirmed defects; document approved/pending rules;
+validate the current two-account journey.
+Exclude: new classes, 24h cap, new key economy, art overhaul, AWS provisioning.
+Data: preserve existing data; any required corrective migration must be reviewed.
+Acceptance:
+- BASELINE_AUDIT.md distinguishes verified, read-only, partial, and blocked findings.
+- Relevant static checks, unit tests, PostgreSQL integration, and E2E pass on identified revisions.
+- Two-account journey covers registration, hunt, rewards, equipment, potions,
+  region change, reload, multiple tabs, listing/purchase, purchase concurrency,
+  expedition, and persistent-state recovery.
+- Visual/console inspection status is explicit.
+- No known unresolved critical integrity defect.
+Current blocker: PostgreSQL integration and browser journey have not been confirmed
+in the latest owner-provided report. CI may resolve this without local Docker.
 
-## Stage 2 — Configurable automatic combat and 24 h offline
-- **Goal:** deterministic combat with skill hotbar, priorities and cooldowns; offline up to 24 h.
-- **Dependencies:** Stage 1.
-- **Scope:** rule engine in `game-core`, combat event model for the client, hotbar UI, offline simulation performance.
-- **Exclusions:** new classes, new loot.
-- **Planned migrations:** versioned automation rules inside `Character.data`, with a data migration for existing characters.
-- **Done when:** same inputs give the same outcome; a 24 h settle fits a time budget; chunked and single settles yield identical rewards.
-- **Required tests:** chunking-invariance property tests, 24 h benchmark, reload/two-tab integration.
-- **Pending decisions:** rule-condition vocabulary; cooldown/priority semantics; whether encounters stay precomputed.
+## 2. Automatic combat and 24h offline
+Dependency: Stage 1 integrity gates.
+Scope: priorities, bounded condition vocabulary, cooldowns/resources, automatic skill
+execution, hotbar status/configuration, offline settlement and return summary.
+Exclude: manual combat requirements, runtime LLM, specializations.
+Data: version Character.data; migrate existing characters safely.
+Acceptance: deterministic tests of priority/resource decisions; offline/online accounting
+consistent with documented rules; no duplicate settlement across tabs/reconnects;
+bounded processing cost for 24h; old characters remain playable.
+Pending: conditions, ties, cooldown persistence, cap semantics.
 
-## Stage 3 — Four classes and specializations
-- **Goal:** add Archer; two specializations per class; gold respec preserving progress.
-- **Dependencies:** Stage 2.
-- **Scope:** class/spec content, unlock point, respec flow.
-- **Exclusions:** hybrid classes.
-- **Planned migrations:** widen `ClassId`; add `specializationId`.
-- **Done when:** every class/spec progresses solo through all regions in simulation.
-- **Required tests:** `pnpm simulate` per spec; respec atomicity.
-- **Pending decisions:** spec names, unlock level, respec cost.
+## 3. Classes and specializations
+Dependency: combat model and approved specialization rules.
+Scope: Archer, four base classes, two specializations each, switching and loadouts.
+Exclude: free class mixing.
+Data: defaults for existing classes/characters and versioned loadouts.
+Acceptance: all specializations can progress solo; distinct strategies demonstrated;
+switching preserves progression and cannot duplicate resources.
+Pending: names, unlock level, cost and activity restrictions.
 
-## Stage 4 — Loot, materials, keys, Codex and economy
-- **Goal:** desirable drops, materials, boss keys, Codex.
-- **Dependencies:** Stage 3.
-- **Scope:** rarity tiers, bound vs tradeable items, key items, Codex tracking, gold sinks.
-- **Exclusions:** sockets, failable enchanting, full alchemy.
-- **Planned migrations:** item binding/rarity, material stacks, Codex table, DB CHECK constraints on balances.
-- **Done when:** no value can be duplicated or created via market, reload or concurrency.
-- **Required tests:** concurrency and conservation tests per economic operation.
-- **Pending decisions:** number of rarities, drop rates, key sources, binding rules.
+## 4. Loot, materials, keys, Codex, and economy
+Dependency: rules and class model.
+Scope: region resources, equipment effects, key fragments, initial recipes,
+Codex and marketplace support for approved tradable items.
+Exclude: unrestricted crafting expansion, gems, relics, full alchemy.
+Data: item versions, ownership/binding, stacks and recipe transactions as needed.
+Acceptance: concurrent operations preserve gold/items; region resources have uses;
+simulations show progress without rare drops; source/sink model documented.
+Pending: rarities, drop tables, binding, Codex eligibility and bonuses.
 
-## Stage 5 — Cooperative expeditions
-- **Goal:** key-gated expeditions with requirements and individual rewards.
-- **Dependencies:** Stages 2 and 4.
-- **Scope:** key lifecycle, requirement checks, automatic boss combat, restart resume.
-- **Exclusions:** guilds, PvP.
-- **Planned migrations:** normalize `BossRoom`; expedition definitions.
-- **Done when:** keys and rewards each applied exactly once; restart-safe.
-- **Required tests:** restart, cancel, defeat and concurrent-start integration tests.
-- **Pending decisions:** key consumption on cancel/defeat, group size, number of expeditions, guarantee material.
+## 5. Cooperative expeditions
+Dependency: combat, key economy, approved participation/reward rules.
+Scope: proposed entry and advanced expeditions; automatic phases; ready/start flow;
+recovery; personal rewards and victory material.
+Data: persisted participants, encounter version, state, key consumption and reward identity.
+Acceptance: eligible group can disconnect and return to one consistent result;
+restart preserves expedition; key charged once; rewards granted once.
+Pending: group size, defeat/cancellation rules, disconnect and retry details.
 
-## Stage 6 — Art, animations and interface
-- **Goal:** consistent visual identity; animated classes and monsters.
-- **Dependencies:** art production may run in parallel once the sprite sheet format and combat event set are fixed (Stage 2). **Integration** depends on validated sprites and combat events.
-- **Scope:** sprite sheets, UI polish, hotbar visuals.
-- **Exclusions:** copying third-party code, assets or content.
-- **Planned migrations:** none.
-- **Done when:** `pnpm validate:assets` passes for all actors; browser console clean.
-- **Required tests:** asset validator, Playwright visual smoke.
-- **Pending decisions:** final art direction approval.
+## 6. Art, animation, and UI
+Dependency: asset format and combat events. Art production can begin earlier.
+Scope: validate Warrior/monster reference pair, then launch classes/specializations,
+monsters/bosses, icons, environments, and core HUD.
+Exclude: claiming concept boards are complete animation sheets.
+Data: version asset metadata without changing game rewards.
+Acceptance: aligned frames, genuine transparency, readable silhouettes and combat;
+no launch placeholders in completed scope; usable core desktop/mobile flows;
+real screenshots and animation inspection.
+Pending: final asset inventory and visual acceptance reference.
 
-## Stage 7 — Balance and friend playtests
-- **Goal:** tuned days-to-weeks progression.
-- **Dependencies:** Stages 2–6.
-- **Scope:** simulation, telemetry, playtests.
-- **Planned migrations:** content-only, if any.
-- **Done when:** target progression curves met in simulation and playtest.
-- **Required tests:** simulation reports.
-- **Pending decisions:** target time-to-level, boss difficulty.
+## 7. Balance and friend playtest
+Dependency: integrated gameplay and representative visuals.
+Scope: simulations and real playtests; class viability; keys, gold sinks, rare loot,
+inventory growth, group advantage, and alternative-account abuse.
+Data: version balance settings and document any conversion needs.
+Acceptance: no known progression dead ends; viable classes; milestone targets supported
+by evidence; no strategy dominates all activities.
+Pending: target progression curve and expected group size.
 
-## Stage 8 — AWS and staging
-- **Goal:** staging that mirrors production.
-- **Dependencies:** Stage 7.
-- **Scope:** CDK deploy, backup/restore drill, monitoring, idempotency-table retention.
-- **Exclusions:** paid resources without owner approval.
-- **Done when:** restore drill and rollback verified in staging.
-- **Required tests:** smoke and load tests against staging.
-- **Pending decisions:** budget, region, domain.
+## 8. AWS staging
+Dependency: stable candidate, deployment review and owner authorization for costs.
+Scope: review existing IaC; CI, ECR, EC2, PostgreSQL persistence, HTTPS, OIDC,
+secrets, logs, alerts, backups, restore, migrations and application rollback.
+Staging and production must have isolated data and secrets.
+Acceptance: real URL tested by multiple accounts; restart preserves state; backup
+restored; deployment procedure and cost assumptions documented; load test performed.
+CDK synthesis alone does not validate deployment.
+Pending: AWS account/region/domain, budget and expected concurrency.
 
-## Stage 9 — Production and follow-up
-- **Goal:** release and operate.
-- **Dependencies:** Stage 8.
-- **Scope:** launch, runbook, incident review.
-- **Done when:** friends playing on production with verified backups.
-- **Pending decisions:** launch date.
+## 9. Production release
+Dependency: staging gates and explicit production authorization.
+Scope: tagged candidate, backup, migrations, immutable image deployment, smoke tests,
+monitoring and first-days follow-up.
+Data: explicitly decide handling of test data; never reset automatically.
+Acceptance: real production journey passes, backups and logs operational, recovery
+procedure ready, release revision and remaining limitations recorded.
+No automatic expansion into new features during stabilization.
+
+## Cross-cutting follow-up
+- Measure global lock contention before replacing the lock.
+- Define safe idempotency retention before deleting records.
+- Coalesce polling/WebSocket refreshes without losing state.
+- Maintain schema compatibility for persisted JSON.
+- Record evidence per tested commit; a historical green build is not a current gate.

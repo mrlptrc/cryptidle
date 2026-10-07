@@ -1,64 +1,65 @@
-# Cryptidle V3 Game Rules
+# Cryptidle V3 — game rules
 
-Core loop: **choose a region → hunt automatically → earn XP, gold, equipment and materials → improve the build → take on harder content with friends.**
-The player decides build, region, equipment, group and automation rules; the character executes. "Combat AI" means deterministic rules and priorities — no LLM at runtime.
+Decision snapshot: 2026-10-07.
+This document separates owner-approved decisions from design proposals.
+Preserve newer approved decisions when importing this snapshot.
 
-## 1. Approved decisions
+## Approved decisions
+- Dark fantasy multiplayer idle RPG, initially for playing with friends.
+- Combat, skills, and bosses are fully automatic.
+- The hotbar displays/configures skills, priorities, and cooldowns; no manual skill
+  execution or reflex mechanics are required.
+- Combat automation uses rules and priorities; no runtime LLM is required.
+- Four base classes: Warrior, Mage, Archer, and Priest.
+- Two specializations per base class; no free class mixing in V3.
+- Specialization switching has a moderate gold cost and preserves progression.
+- Every class must be viable for solo progression.
+- Long-term grind with friends, with goals across sessions, days, and weeks.
+- One host key opens a boss expedition for the group; participants must meet requirements.
+- V3 supports up to 24 hours of offline progress.
+- V3 is the first production release, including infrastructure and operational readiness.
+- Art draws inspiration from Ragnarok and Tree of Savior with original Cryptidle identity.
 
-1. Everything is automatic, including skills and bosses.
-2. A hotbar to view and configure skills, priorities and cooldowns.
-3. No content requires manual skill execution or reflexes.
-4. Four base classes: Warrior, Mage, Archer, Priest.
-5. Progression through specialization.
-6. Two specializations per class.
-7. No free class combination in this version.
-8. Changing specialization costs a moderate amount of gold and preserves progress.
-9. Long grind with friends, with goals spanning days and weeks.
-10. Every class must be able to progress solo.
-11. A host key opens the boss for the group.
-12. Participants must meet the expedition requirements.
-13. Offline progress of up to 24 h in V3.
-14. V3 is the first production release, with infrastructure and operations prepared.
-
-Out of scope for V3: gems/sockets, relics, pets, guilds, PvP, hybrid classes, full alchemy, failable enchanting.
-
-## 2. Pending proposals (not approved — no numbers are final)
-
-- Specializations: Warrior → Knight / Berserker; Mage → Elementalist / Warlock; Archer → Marksman / Hunter; Priest → Hierophant / Exorcist.
-- Group size 2–4.
-- Key consumed when the expedition starts; cancelling before start does not consume it; defeat consumes it.
-- Expedition resumes after a server restart.
-- Individual rewards; equipment tradeable; boss guarantee material bound to the character.
-- Two initial expeditions.
-- Rare direct drop plus guaranteed material per victory.
-- Six rarities.
-- Initial Codex for monsters, equipment and bosses.
-
-Technical guarantees (atomic operations, rewards granted exactly once) are required regardless of the final gameplay numbers.
-
-## 3. Current behavior verified in code (as of Stage 1)
-
-Source: `packages/game-core/src/index.ts`, `apps/server/src/game.ts`.
-
-- Classes: Warrior, Mage, Priest; 3 skills each, 2 active. Skills are passive multipliers (damage, heal, protection, speed) — no cooldowns or priorities.
-- Regions: Bosque das Cinzas (lvl 1), Pântano dos Sussurros (lvl 5), Cripta do Eclipse (lvl 10); 3 monsters each.
-- Level cap 20; `xpForLevel(l) = 75·(l−1)²`.
-- Each encounter is resolved up front from a seeded RNG (outcome hidden from the client) and lasts ≥ 18 s; a defeat adds 30 s of recovery and costs up to 3 gold.
-- Potions: 8 gold each, heal 55 % of max HP, at most one per encounter, used when projected HP falls under the configured threshold.
-- Drops: 22 % per victory (first kill guaranteed); rarities common/uncommon/rare/epic. Inventory limit 200; overflow drops are converted to gold.
-- Offline cap: **8 h** (`config.offlineCapMs`); the `OFFLINE_CAP_HOURS` env var can only lower it.
-- Changing equipment or build first settles elapsed time, then restarts the current encounter.
-- Market: list unequipped items, buy, cancel. Every mutation runs under a global PostgreSQL advisory lock and an idempotency key.
-- Boss: level ≥ 3, 2–4 players, all ready, leader starts; outcome simulated at start, resolves after 60 s; each member is rewarded once (`BossReward` primary key); 15 min cooldown. No key item.
-
-## 4. Required changes for V3
-
-| Change | Stage |
+## Proposed details — require a decision before implementation
+| Area | Proposal / open question |
 | --- | --- |
-| Configurable automatic combat: hotbar, priorities, cooldowns, deterministic rule engine, combat event stream | 2 |
-| Offline cap from 8 h to **24 h** — the approved V3 target, but it belongs to Stage 2 together with performance and balance validation of 24 h simulations. **Not changed in Stage 1.** | 2 |
-| Archer class; two specializations per class; gold-cost respec | 3 |
-| Loot/rarity rework, materials, keys, Codex, economy sinks | 4 |
-| Key-gated cooperative expeditions with requirements | 5 |
-| Final art, animations and interface | 6 |
-| Balance and friend playtests | 7 |
+| Warrior | Knight / Berserker |
+| Mage | Elementalist / Warlock |
+| Archer | Marksman / Hunter |
+| Priest | Hierophant / Exorcist |
+| Specializations | Unlock level, gold cost, switch restrictions, and saved loadouts |
+| Automation | Allowed conditions, priority ties, resource rules, cooldown behavior |
+| Party | Two to four players |
+| Key | Atomic consumption on start; none on pre-start cancellation; spent on defeat |
+| Expedition recovery | Resume after server restart; no extra key charge |
+| Rewards | Individual loot, rare direct drops plus guaranteed victory material |
+| Binding | Tradable equipment; character-bound boss guarantee material |
+| Content | Two initial expeditions and six rarities |
+| Codex | Monsters, equipment, bosses; bonus limits and acquisition rules |
+| Offline | Exact cap/reset semantics, overflow behavior, and event accounting |
+| Balance | Drop rates, progression curve, region gates, and expected milestone times |
+
+Technical integrity is mandatory regardless of pending balance choices:
+no duplicate rewards, unauthorized transfers, negative balances, or lost committed items.
+
+## Current implementation baseline
+The owner relayed a Stage 1 report on 2026-10-07. It reports:
+- Three existing classes; Archer and specializations are future work.
+- Offline cap remains 8h; changing it belongs to Stage 2.
+- No configurable priority system or V3 hotbar yet.
+- Character state is stored in Character.data JSON.
+- Economic actions reportedly use a PostgreSQL advisory transaction lock.
+- Integration and E2E verification were blocked; read code and current CI before
+  treating behavior as verified.
+
+Detailed implementation evidence belongs in BASELINE_AUDIT.md, maintained by the
+implementation agent. This package does not replace that audit.
+
+## Deferred
+Free class hybrids, PvP, guilds, pets, sockets/gems, relics, full alchemy,
+and failure-based enchanting are not part of Stage 1.
+Do not add them to V3 implementation scope without a recorded owner decision.
+
+## Decision updates
+For new decisions record date, owner instruction, affected rule, and implementation stage.
+For balance experiments label values provisional and record simulation/playtest evidence.
