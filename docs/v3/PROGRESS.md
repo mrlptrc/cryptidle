@@ -1,0 +1,94 @@
+# Cryptidle V3 — progress
+
+## Import status
+Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
+This file has NOT been independently verified against the current branch or CI.
+Merge with newer repository records; do not overwrite newer evidence.
+
+## Update — 2026-10-07 (Stage 1 verification via CI)
+- Date and authorized task: 2026-10-07, merge agent kit and resume Stage 1 outstanding verification.
+- Branch / commit / tested SHA: feat/v3-stage1-baseline; docs commit 69b354b; tested SHA 69b354b5a118235945e3be474ee2f382d8edf4c2.
+- Changes: agent kit (AGENTS.md, CLAUDE.md, docs/v3 rules/plan/progress) committed; BASELINE_AUDIT updated with CI evidence.
+- Commands and actual results (GitHub Actions, isolated postgres:17.6 service, database cryptidle_test):
+  - unit: 12/12 passed
+  - pnpm test:integration: 15/15 passed (includes abandoned-room regression, concurrent purchase, cancel vs purchase, rollback, cross-owner authorization, two-tab/no duplicate rewards, boss restart with single reward)
+  - Playwright journey 'two real accounts hunt, equip, trade, chat and complete the same boss': 1 passed
+- CI / PR / artifact links: PR https://github.com/mrlptrc/cryptidle/pull/2; runs https://github.com/mrlptrc/cryptidle/actions/runs/37634209248 (pull_request) and https://github.com/mrlptrc/cryptidle/actions/runs/37634201641 (push).
+- Checks not executed: visual and browser console inspection (no browser session in this environment); local Docker still returns HTTP 500. The E2E journey does not explicitly cover potions purchase, region switching beyond the first region, or concurrent purchase from two browser tabs; these are covered only at API/integration level.
+- Pending decisions: none blocking Stage 1.
+- Next concrete action: owner (or a session with a browser) runs the app locally and inspects the hunt, inventory, market and boss screens plus console; then mark the visual gate and close Stage 1.
+
+Gates now satisfied by the CI run above: PostgreSQL integration; marketplace concurrency/rollback; authorization and duplicate settlement; two-account E2E; persistent reward recovery (boss restart). Remaining: visual/console inspection; Stage 2 readiness sign-off by owner.
+
+## Current authorized delivery
+Stage 1 — baseline audit, stabilization, and outstanding verification.
+Status: INCOMPLETE; do not begin Stage 2 automatically.
+
+## Last reported Git state
+- Branch: feat/v3-stage1-baseline
+- Base: origin/main at 6a2674e
+- Reported code commit: ede5a69
+- A subsequent documentation commit was reported; SHA not supplied.
+- PR: https://github.com/mrlptrc/cryptidle/pull/2
+- Merge not authorized by this document.
+
+## Reported changes
+- Corrected speed multiplier symbol and singular/plural presentation.
+- Rounded attack/defense display without changing rules.
+- Rejected joining an abandoned waiting boss room with no leader.
+- Added a regression test for that room; it had not run.
+- Added docs/v3 documentation and README updates.
+
+## Reported checks — not rerun by this package
+| Check | Reported result |
+| --- | --- |
+| pnpm lint | Passed |
+| pnpm typecheck | Passed |
+| pnpm test | 12/12 passed |
+| pnpm build | Passed |
+| pnpm validate:assets | Passed, 11 spritesheets |
+| CDK synthesis and infrastructure test | Passed |
+| PostgreSQL integration | Not run; 15 tests reported |
+| Playwright E2E / two-account journey | Not run |
+| Visual and browser console inspection | Not performed |
+
+Exact tested SHA was not supplied for all checks; confirm it before closing the stage.
+
+## Blocker
+Local Docker Engine returned HTTP 500. PostgreSQL on port 5432 was not project-owned
+and was intentionally not used. No production or unrelated database may be used.
+
+## Next action
+Inspect the latest PR revision and CI configuration/executions.
+If missing, add isolated PostgreSQL integration and Playwright jobs using disposable
+_test databases, migrations, health checks, and sanitized failure artifacts.
+Run required gates, inspect results, and record URLs plus the tested SHA.
+
+## Remaining gates
+- [ ] PostgreSQL integration passes, including new room regression.
+- [ ] Marketplace concurrency and rollback invariants verified.
+- [ ] Authorization and duplicate-settlement checks verified.
+- [ ] Two-account E2E journey completed.
+- [ ] Persistent activity/reward recovery verified.
+- [ ] Visual/console inspection completed or clearly identified as remaining.
+- [ ] Audit updated with evidence and unresolved risks.
+- [ ] Stage 2 readiness explicitly reported to owner.
+
+## Known risks / future work
+- Global advisory lock contention is unmeasured.
+- Character.data needs versioned migration when its structure changes.
+- Idempotency records have no reported retention policy.
+- Polling and WebSocket notifications can trigger overlapping state requests.
+- Read-only code inspection is not runtime verification.
+
+## Update format for the next agent
+Append or replace stale status with:
+- Date and authorized task:
+- Branch / commit / tested SHA:
+- Changes:
+- Commands and actual results:
+- CI / PR / artifact links:
+- Checks not executed:
+- Pending decisions:
+- Next concrete action:
+Preserve useful historical evidence; never convert "blocked" into "passed".

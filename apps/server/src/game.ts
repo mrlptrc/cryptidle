@@ -111,7 +111,7 @@ export async function boss(tx:Tx,userId:string,kind:string,body:Record<string,un
   c.regionId=null;c.encounter=null;await save(tx,c);
   const member={characterId:c.id,name:c.name,classId:c.classId,skin:c.skin,ready:false,preparation:'balanced' as Preparation,stats:getStats(c,items),skills:c.skills};
   if(kind==='create') { const id=randomUUID(); room={id,code:randomUUID().slice(0,8).toUpperCase(),leaderId:c.id,status:'waiting',members:[member],startedAt:null,endsAt:null,bossHp:1,bossMaxHp:1,victory:null,rewardGold:0,rewardXp:0,log:[]}; await tx.bossRoom.create({data:{id,code:room.code,data:json(room)}}); }
-  else { const found=await tx.bossRoom.findUnique({where:{code:(body.code as string).toUpperCase()}}); insist(found,'Sala não encontrada',404); room=found.data as unknown as BossRoom; insist(room.status==='waiting'&&room.members.length<4,'Sala indisponível'); room.members.push(member); }
+  else { const found=await tx.bossRoom.findUnique({where:{code:(body.code as string).toUpperCase()}}); insist(found,'Sala não encontrada',404); room=found.data as unknown as BossRoom; insist(room.status==='waiting'&&room.members.length>0&&room.members.length<4&&room.members.some(m=>m.characterId===room!.leaderId),'Sala indisponível'); room.members.push(member); }
   await tx.character.update({where:{id:c.id},data:{roomId:room.id}});
  } else {
   insist(room,'Entre em uma sala primeiro'); insist(room.status!=='running','Expedição em andamento');

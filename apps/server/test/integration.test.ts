@@ -114,6 +114,13 @@ describe.skipIf(!enabled)('PostgreSQL economy and real authentication',()=>{
   const gold=a.character!.gold;expect((await state(0)).character!.gold).toBe(gold);
   expect(await prisma.bossReward.count({where:{roomId:a.room!.id}})).toBe(2);
  });
+ it('does not let players join a waiting room abandoned by every member',async()=>{
+  await fixture(2,{level:10,xp:xpForLevel(10),regionId:null,encounter:null,bossCooldownUntil:0});
+  const create=await request(users[2].cookie,'/api/boss/create');expect(create.statusCode,create.body).toBe(200);const code=create.json<GameState>().room!.code;
+  expect((await request(users[2].cookie,'/api/boss/leave')).statusCode).toBe(200);
+  const join=await request(users[0].cookie,'/api/boss/join',{code});expect(join.statusCode,join.body).toBe(400);
+  expect((await state(0)).room?.code).not.toBe(code);
+ });
  it('retains limited chat, rate limits repeat chat and exposes rankings',async()=>{
   const sent=await request(users[0].cookie,'/api/chat',{text:'Olá aventureiros!'});expect(sent.statusCode,sent.body).toBe(200);
   expect((await request(users[0].cookie,'/api/chat',{text:'spam'})).statusCode).toBe(429);
