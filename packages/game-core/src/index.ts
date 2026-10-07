@@ -50,7 +50,7 @@ export function levelForXp(xp:number):number { return Math.min(config.maxLevel,M
 export function createCharacter(input:{id:string;userId:string;name:string;classId:ClassId;now:number;seed?:number}):Character {
   const c=classes.find(c=>c.id===input.classId); if(!c)throw new Error('Classe inválida');
   let seed=input.seed; if(seed===undefined){seed=2166136261;for(const ch of input.id)seed=Math.imul(seed^ch.charCodeAt(0),16777619)>>>0;}
-  return {...input,level:1,xp:0,gold:config.initialGold,hp:c.stats.hp,potions:config.initialPotions,skin:0,kills:0,defeats:0,regionId:null,skills:c.skills.slice(0,2),potionThreshold:.4,lastSettledAt:input.now,huntSeed:seed,encounter:null,bossCooldownUntil:0};
+  return {...input,level:1,xp:0,gold:config.initialGold,hp:c.stats.hp,potions:config.initialPotions,skin:0,kills:0,defeats:0,regionId:null,skills:c.skills.slice(0,2),potionThreshold:.4,lastSettledAt:input.now,huntSeed:seed,huntSequence:0,encounter:null,bossCooldownUntil:0};
 }
 export function getStats(c:Character,items:Item[]):Stats {
   const base=classes.find(x=>x.id===c.classId)!.stats;
@@ -81,7 +81,8 @@ function encounter(c:Character,items:Item[]):Encounter {
   const pool=equipment.filter(d=>d.regionId===region.id&&d.rarity===(rarityRoll<.6?'common':rarityRoll<.88?'uncommon':rarityRoll<.98?'rare':'epic'));
   const drop=victory&&(c.kills===0||dropRoll<.22)?pool[Math.floor(random(c)*pool.length)].id:null;
   const durationMs=Math.max(config.encounterMinMs,Math.min(90_000,Math.round((rounds*3200+6500)/100)*100))+(victory?0:config.defeatRecoveryMs);
-  return {monsterId:monster.id,durationMs,remainingMs:durationMs,victory,hpAfter:victory?Math.max(1,Math.round(remaining)):Math.round(s.hp*.75),potionsUsed,xp:victory?monster.xp:0,gold:victory?monster.gold:0,drop};
+  c.huntSequence=(c.huntSequence??c.kills+c.defeats)+1;
+  return {sequence:c.huntSequence,monsterId:monster.id,durationMs,remainingMs:durationMs,monsterMaxHp:monster.stats.hp,monsterHp:monster.stats.hp,victory,hpAfter:victory?Math.max(1,Math.round(remaining)):Math.round(s.hp*.75),potionsUsed,xp:victory?monster.xp:0,gold:victory?monster.gold:0,drop};
 }
 export function startHunt(character:Character,items:Item[],regionId:string|null,now:number):Character {
   const c=structuredClone(character);
@@ -95,11 +96,12 @@ export function settleHunt(character:Character,items:Item[],now:number,options:{
   if(now<c.lastSettledAt)return {character:c,summary:{...summary,elapsedMs:0},drops:[]};
   c.lastSettledAt=now;
   if(!c.regionId)return {character:c,summary:{...summary,elapsedMs:0,capped:false},drops:[]};
+  if(c.encounter){const monster=regions.find(r=>r.id===c.regionId)?.monsters.find(m=>m.id===c.encounter?.monsterId);const maxHp=c.encounter.monsterMaxHp||monster?.stats.hp||1;c.huntSequence??=c.kills+c.defeats+1;c.encounter.sequence||=c.huntSequence;c.encounter.monsterMaxHp=maxHp;c.encounter.monsterHp||=Math.max(1,Math.ceil(maxHp*c.encounter.remainingMs/c.encounter.durationMs));}
   let available=Math.min(elapsed,cap);
   while(available>0) {
     c.encounter??=encounter(c,items);
     const fight=c.encounter;
-    if(available<fight.remainingMs){fight.remainingMs-=available;break;}
+    if(available<fight.remainingMs){fight.remainingMs-=available;fight.monsterHp=Math.max(1,Math.ceil(fight.monsterMaxHp*fight.remainingMs/fight.durationMs));break;}
     available-=fight.remainingMs;summary.combats++;
     c.potions-=fight.potionsUsed;summary.potionsUsed+=fight.potionsUsed;c.hp=fight.hpAfter;
     if(fight.victory){c.kills++;c.xp+=fight.xp;c.gold+=fight.gold;summary.xp+=fight.xp;summary.gold+=fight.gold;

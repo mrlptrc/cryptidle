@@ -38,6 +38,8 @@ describe.skipIf(!enabled)('PostgreSQL economy and real authentication',()=>{
  });
  it('starts hunt, persists drops, handles two tabs and repeats without reward duplication',async()=>{
   const start=await request(users[0].cookie,'/api/hunt',{regionId:'hollow'});expect(start.statusCode,start.body).toBe(200);expect(start.json<GameState>().character!.huntSeed).toBe(0);
+  const initial=start.json<GameState>().character!.encounter!;expect(initial.sequence).toBe(1);expect(initial.monsterHp).toBe(initial.monsterMaxHp);expect(initial.drop).toBeNull();expect(initial.xp).toBe(0);expect(initial.gold).toBe(0);
+  time+=5000;const active=(await state(0)).character!.encounter!;expect(active.sequence).toBe(initial.sequence);expect(active.monsterHp).toBeLessThan(initial.monsterHp);expect(active.monsterHp).toBeGreaterThan(0);
   const old=await state(0);time+=600000;
   const [a,b]=await Promise.all([state(0),state(0)]);
   expect(a.character!.xp).toBe(b.character!.xp);expect(a.character!.xp).toBeGreaterThan(old.character!.xp);

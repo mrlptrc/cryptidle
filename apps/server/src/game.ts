@@ -43,7 +43,9 @@ export async function state(tx: Tx, userId: string, now: number, summary?: Rewar
  const {c,items} = await load(tx,userId);
  const accrued = await settle(tx,c,items,now);
  // Do not disclose future random rewards to a client that can stop/restart hunts.
- const visible={...c,huntSeed:0,stats:getStats(c,items),encounter:c.encounter?{...c.encounter,drop:null,xp:0,gold:0,victory:false,hpAfter:c.hp,potionsUsed:0}:null};
+ const monster=regions.find(r=>r.id===c.regionId)?.monsters.find(m=>m.id===c.encounter?.monsterId);
+ const maxHp=c.encounter?.monsterMaxHp||monster?.stats.hp||1;
+ const visible={...c,huntSeed:0,stats:getStats(c,items),encounter:c.encounter?{...c.encounter,sequence:c.encounter.sequence||c.kills+c.defeats+1,monsterMaxHp:maxHp,monsterHp:c.encounter.monsterHp||Math.max(1,Math.ceil(maxHp*c.encounter.remainingMs/c.encounter.durationMs)),drop:null,xp:0,gold:0,victory:false,hpAfter:c.hp,potionsUsed:0}:null};
  return {character:visible,items,summary:summary || accrued,room,serverTime:now};
 }
 export async function create(tx: Tx, userId: string, name: string, classId: ClassId, now: number) {

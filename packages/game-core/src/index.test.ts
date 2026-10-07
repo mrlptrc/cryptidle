@@ -3,6 +3,25 @@ import {classes,config,createCharacter,equipment,getStats,levelForXp,regions,set
 import type {BossMember,Character,Item} from '@cryptidle/shared';
 const fresh=(classId:Character['classId']='warrior')=>createCharacter({id:'fixture-42',userId:'user-1',name:'Aventureiro',classId,now:0});
 describe('authoritative encounter progression',()=>{
+  it('persists server-computed enemy HP progress during an encounter',()=>{
+    const started=startHunt(fresh(),[],'hollow',0);const initial=started.encounter!;
+    const half=settleHunt(started,[],Math.floor(initial.durationMs/2)).character.encounter!;
+    expect(half.monsterMaxHp).toBe(initial.monsterMaxHp);
+    expect(half.monsterHp).toBeLessThan(initial.monsterHp);
+    expect(half.monsterHp).toBeGreaterThan(0);
+    const done=settleHunt(started,[],initial.durationMs).character;
+    expect(done.kills+done.defeats).toBe(1);
+  });
+  it('fills visual encounter fields for characters saved before the contract update',()=>{
+    const legacy=startHunt(fresh(),[],'hollow',0);const old=legacy.encounter!;const partial=old as Partial<typeof old>;delete partial.sequence;delete partial.monsterHp;delete partial.monsterMaxHp;
+    const current=settleHunt(legacy,[],5000).character.encounter!;
+    expect(current.sequence).toBe(1);expect(current.monsterMaxHp).toBeGreaterThan(0);expect(current.monsterHp).toBeLessThan(current.monsterMaxHp);
+  });
+  it('assigns a new sequence after restarting the same region before the prior fight ends',()=>{
+    const first=startHunt(fresh(),[],'hollow',0);const partial=settleHunt(first,[],2000).character;
+    const restarted=startHunt(partial,[],'hollow',2000);
+    expect(restarted.encounter!.sequence).toBe(first.encounter!.sequence+1);
+  });
   it('is identical with one offline settlement and many online settlements',()=>{
     const initial=startHunt(fresh(),[],'hollow',0);
     const offline=settleHunt(initial,[],3_600_000);

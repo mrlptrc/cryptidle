@@ -9,8 +9,8 @@ export interface MonsterDefinition { id:string; name:string; stats:Stats; xp:num
 export interface RegionDefinition { id:string; name:string; description:string; minLevel:number; monsters:MonsterDefinition[] }
 export interface Item { id:string; definitionId:string; ownerId:string; equipped:boolean; listed:boolean }
 export interface RewardSummary { xp:number; gold:number; items:string[]; combats:number; defeats:number; potionsUsed:number; elapsedMs:number; capped:boolean }
-export interface Encounter { monsterId:string; durationMs:number; remainingMs:number; victory:boolean; hpAfter:number; potionsUsed:number; xp:number; gold:number; drop:string|null }
-export interface Character { id:string; userId:string; name:string; classId:ClassId; level:number; xp:number; gold:number; hp:number; potions:number; skin:0|1; kills:number; defeats:number; regionId:string|null; skills:string[]; potionThreshold:number; lastSettledAt:number; huntSeed:number; encounter:Encounter|null; bossCooldownUntil:number; stats?:Stats }
+export interface Encounter { sequence:number; monsterId:string; durationMs:number; remainingMs:number; monsterMaxHp:number; monsterHp:number; victory:boolean; hpAfter:number; potionsUsed:number; xp:number; gold:number; drop:string|null }
+export interface Character { id:string; userId:string; name:string; classId:ClassId; level:number; xp:number; gold:number; hp:number; potions:number; skin:0|1; kills:number; defeats:number; regionId:string|null; skills:string[]; potionThreshold:number; lastSettledAt:number; huntSeed:number; huntSequence?:number; encounter:Encounter|null; bossCooldownUntil:number; stats?:Stats }
 export interface Listing { id:string; item:Item; definition:EquipmentDefinition; price:number; sellerId:string; sellerName:string; createdAt:number }
 export type Preparation = 'balanced'|'attack'|'guard';
 export interface BossMember { characterId:string; name:string; classId:ClassId; skin:0|1; ready:boolean; preparation:Preparation; stats:Stats; skills:string[] }
