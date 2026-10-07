@@ -1,0 +1,56 @@
+{
+  "method": "Deterministic seeded simulation; settle each minute, equip score upgrades, buy potions with earned gold, move at unlock. Not playtesting.",
+  "results": [
+    {
+      "class": "Guerreiro",
+      "firstUpgradeMinutes": 1,
+      "secondRegionMinutes": 20,
+      "bossEligibleMinutes": 6,
+      "levelAfter120Minutes": 20,
+      "kills": 395,
+      "defeats": 0,
+      "gold": 10874,
+      "stats": {
+        "hp": 548,
+        "attack": 136,
+        "defense": 80.5,
+        "speed": 1.468
+      },
+      "regions": 3
+    },
+    {
+      "class": "Mago",
+      "firstUpgradeMinutes": 1,
+      "secondRegionMinutes": 20,
+      "bossEligibleMinutes": 6,
+      "levelAfter120Minutes": 20,
+      "kills": 397,
+      "defeats": 0,
+      "gold": 10864,
+      "stats": {
+        "hp": 538,
+        "attack": 147,
+        "defense": 87.5,
+        "speed": 1.588
+      },
+      "regions": 3
+    },
+    {
+      "class": "Sacerdote",
+      "firstUpgradeMinutes": 1,
+      "secondRegionMinutes": 20,
+      "bossEligibleMinutes": 6,
+      "levelAfter120Minutes": 20,
+      "kills": 395,
+      "defeats": 0,
+      "gold": 10925,
+      "stats": {
+        "hp": 579,
+        "attack": 139,
+        "defense": 89.5,
+        "speed": 1.498
+      },
+      "regions": 3
+    }
+  ]
+}
