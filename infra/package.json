@@ -1,0 +1,1 @@
+{"name":"@cryptidle/infra","private":true,"type":"module","scripts":{"synth":"cdk synth --quiet","typecheck":"tsc --noEmit","test":"tsx --test test.ts"},"dependencies":{"aws-cdk-lib":"2.219.0","constructs":"10.4.2"},"devDependencies":{"aws-cdk":"2.1033.0","tsx":"4.20.6","typescript":"5.9.3","@types/node":"24.10.1"}}

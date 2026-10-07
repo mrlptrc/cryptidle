@@ -1,0 +1,57 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.6-bookworm
+        env:
+          POSTGRES_USER: cryptidle
+          POSTGRES_PASSWORD: ci-isolated-password
+          POSTGRES_DB: cryptidle_test
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U cryptidle -d cryptidle_test" --health-interval 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://cryptidle:ci-isolated-password@localhost:5432/cryptidle_test
+      BETTER_AUTH_SECRET: ci-only-isolated-32-character-secret-value
+      APP_ORIGIN: http://localhost:3000
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: {version: 10.24.0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: pnpm}
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @cryptidle/server exec prisma generate
+      - run: pnpm --filter @cryptidle/server exec prisma migrate deploy
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm --filter @cryptidle/infra test
+      - run: pnpm --filter @cryptidle/infra synth
+      - run: pnpm --filter @cryptidle/server test:integration
+      - name: Install Chromium for two-player browser journey
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - name: Restore PostgreSQL backup into isolated database
+        run: |
+          export PG_CONTAINER=$(docker ps --filter ancestor=postgres:17.6-bookworm --format '{{.ID}}')
+          pnpm exec tsx scripts/verify-game-backup.ts
+      - name: Scan committed files for secrets
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.24.3 detect --source=/repo --redact --exit-code=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-artifacts
+          path: |
+            infra/cdk.out/*.template.json
+            test-results/
+            docs/evidence/*.png
+          if-no-files-found: ignore

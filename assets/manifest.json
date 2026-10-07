@@ -1,0 +1,175 @@
+{
+  "project": "Cryptidle",
+  "created": "2026-10-06",
+  "projectLicense": "Owner decision pending. No definitive project license selected.",
+  "assets": [
+    {
+      "files": [
+        "apps/web/public/art/town.png"
+      ],
+      "status": "final-mvp",
+      "source": "OpenAI built-in image_gen",
+      "license": "AI-generated original output; distribution license to be decided by owner",
+      "prompt": "Use case: stylized-concept. Asset type: reusable game environment background, landscape 1536x1024. Create original dark medieval fantasy pixel art for Cryptidle: cozy small village courtyard, slightly inclined overhead perspective, cobblestone center with broad empty open playable area, stone houses and warm amber windows arranged on edges, ancient round well left, market stall right, pine trees, distant castle silhouettes at top. Dusk indigo and muted green palette with warm golden lights. Crisp deliberate visible pixel clusters, 16-bit game background aesthetic. No characters, no UI, no letters, no logos, no text. Center must stay open for separately rendered animated sprites."
+    },
+    {
+      "files": [
+        "apps/web/public/art/forest.png"
+      ],
+      "status": "final-mvp",
+      "source": "OpenAI built-in image_gen",
+      "license": "AI-generated original output; distribution license to be decided by owner",
+      "prompt": "Use case: stylized-concept. Asset type: reusable pixel art RPG environment background, landscape 1536x1024. Original haunted medieval forest clearing, overhead slightly inclined camera. Large open mossy path in center for separately rendered game characters. Twisted pines, old stone lanterns with turquoise light, exposed roots, ancient ruined wall around borders. Threatening but beautiful misty forest dusk. Crisp intentional pixel clusters, 16 bit game style. Muted pine green, teal, charcoal, amber palette. No characters, no text, no UI, no logo."
+    },
+    {
+      "files": [
+        "apps/web/public/art/crypt.png"
+      ],
+      "region": "marsh",
+      "status": "final-mvp",
+      "source": "OpenAI built-in image_gen",
+      "license": "AI-generated original output; distribution license to be decided by owner",
+      "prompt": "Use case: stylized-concept. Asset: original reusable RPG pixel art environment, landscape 1536x1024. Dark medieval haunted marsh courtyard, slightly inclined overhead perspective. Large clear walkable central area of wet moss stone and shallow water, broken stone arches and crooked reeds and willow roots along edges, sickly turquoise lanterns, purple mist, ancient ruined chapel at top. Crisp deliberate 16-bit pixel clusters, muted teal and violet and gray palette. No characters, no UI, no text. Separate sprites will be placed in open central area."
+    },
+    {
+      "files": [
+        "apps/web/public/art/citadel.png"
+      ],
+      "region": "crypt and boss arena",
+      "status": "final-mvp",
+      "source": "OpenAI built-in image_gen",
+      "license": "AI-generated original output; distribution license to be decided by owner",
+      "prompt": "Use case: stylized-concept. Asset: reusable original medieval RPG pixel art environment landscape 1536x1024. Cripta do Eclipse, imposing dark obsidian crypt cathedral arena, top-down slightly inclined camera. Broad open central stone floor for separately rendered animated characters. Broken tall columns and ancient statues at left and right edges, carved stairway and closed rune gate at top, purple and muted golden braziers, ominous eclipse shrine. Crisp intentional 16-bit pixel clusters, dark indigo violet charcoal and faded gold palette. No characters, no UI, no letters, no text, no logos. Center clear."
+    },
+    {
+      "files": [
+        "apps/web/public/art/warrior-0.png",
+        "apps/web/public/art/warrior-1.png",
+        "apps/web/public/art/mage-0.png",
+        "apps/web/public/art/mage-1.png",
+        "apps/web/public/art/priest-0.png",
+        "apps/web/public/art/priest-1.png",
+        "apps/web/public/art/monster-0.png",
+        "apps/web/public/art/monster-1.png",
+        "apps/web/public/art/monster-2.png",
+        "apps/web/public/art/monster-3.png",
+        "apps/web/public/art/monster-4.png",
+        "apps/web/public/art/monster-5.png",
+        "apps/web/public/art/monster-6.png",
+        "apps/web/public/art/monster-7.png",
+        "apps/web/public/art/monster-8.png",
+        "apps/web/public/art/monster-9.png",
+        "apps/web/public/art/weapon.png",
+        "apps/web/public/art/head.png",
+        "apps/web/public/art/chest.png",
+        "apps/web/public/art/accessory.png",
+        "apps/web/public/art/potion.png",
+        "apps/web/public/art/gold.png",
+        "apps/web/public/art/xp.png",
+        "apps/web/public/art/skill.png"
+      ],
+      "status": "final-mvp",
+      "source": "Original deterministic programmatic drawing in assets/generate_sprites.py; not AI-generated",
+      "license": "Original project asset; distribution license to be decided by owner",
+      "tools": "Python and Pillow 12.3.0 (HPND license)",
+      "spriteLayout": "32x48 RGBA, 12 frames per sheet. idle 0-2, move 3-5, attack 6-8, defeat 9-11. Icons 24x24.",
+      "monsterOrder": [
+        "rat",
+        "slime",
+        "bat",
+        "skeleton",
+        "wisp",
+        "spider",
+        "knight",
+        "shade",
+        "golem",
+        "eclipse-guardian"
+      ]
+    },
+    {
+      "files": [
+        "apps/web/src/World.tsx",
+        "apps/web/src/style.css"
+      ],
+      "status": "final-mvp",
+      "source": "Original procedural Phaser effects and typographic Cryptidle wordmark",
+      "license": "Original project code; license decision belongs to owner",
+      "effects": [
+        "attack arc",
+        "healing glow",
+        "server-confirmed HP delta text",
+        "gold and XP reward text",
+        "item star effect"
+      ],
+      "thirdPartyFonts": "Cinzel and Inter via Google Fonts, SIL Open Font License; system fallbacks included"
+    },
+    {
+      "files": [
+        "assets/forest-combat-atlas.png",
+        "apps/web/public/art/forest-warrior.png",
+        "apps/web/public/art/forest-rat.png",
+        "apps/web/public/art/forest-slime.png",
+        "apps/web/public/art/forest-bat.png"
+      ],
+      "status": "iteration-2-reference-region",
+      "source": "OpenAI built-in image_gen; original Cryptidle character art",
+      "license": "AI-generated original output; distribution license remains owner decision",
+      "prompt": "Transparent-background pixel art sprite atlas with a 4 by 4 grid. Row 1: same dark teal medieval armored warrior, red-brown cape and sword, four distinct poses idle, walking stride, sword raised, sword slash. Row 2: same ash-gray forest rat with ember eyes, idle, step, bite, defeated fall. Row 3: same small moss-green spectral slime with teal core, idle, hop, lunge, hurt. Row 4: same charcoal bat with muted teal wings, hover, wing beat, swoop, defeated. Each cell has one sprite at consistent scale with clear transparent gaps and aligned ground plane. Crisp high-detail 16-bit pixel clusters, dark outlines, forest dusk colors, contact shadows. No scenery, grid, text, logos, UI, or borders.",
+      "atlas": "1536x1024 RGBA, 4 rows by 4 pose frames; sliced to four 640x112 RGBA sheets with 160x112 frames by assets/slice_forest_atlas.py",
+      "animations": {
+        "warrior": {
+          "idle": [
+            0,
+            1
+          ],
+          "move": [
+            0,
+            1
+          ],
+          "attack": [
+            2,
+            3
+          ],
+          "hurt": "short server-HP reaction"
+        },
+        "monsters": {
+          "idle": [
+            0,
+            1
+          ],
+          "move": [
+            0,
+            1
+          ],
+          "attack": [
+            2,
+            3
+          ],
+          "defeat": [
+            3
+          ]
+        }
+      },
+      "scope": "Guerreiro base skin and the three Bosque das Cinzas monsters. Other class/region sprites retain MVP sheets pending the next art pass."
+    }
+  ],
+  "combatSpriteSheets": {
+    "status": "procedural draft; art quality is not approved as final",
+    "cell": "112x144 RGBA, nearest-neighbour, fixed baseline",
+    "warrior": {
+      "files": ["apps/web/public/art/warrior-forest-idle.png", "apps/web/public/art/warrior-forest-walk.png", "apps/web/public/art/warrior-forest-attack.png", "apps/web/public/art/warrior-forest-skill.png", "apps/web/public/art/warrior-forest-hurt.png", "apps/web/public/art/warrior-forest-death.png"],
+      "framesPerAction": {"idle": 6, "walk": 6, "attack": 6, "skill": 6, "hurt": 3, "death": 6},
+      "source": "Original deterministic Pillow drawing in assets/generate_detailed_sprites.py",
+      "license": "Original project asset; final project license remains owner decision",
+      "scope": "Warrior base skin in Bosque das Cinzas"
+    },
+    "bat": {
+      "files": ["apps/web/public/art/bat-forest-idle.png", "apps/web/public/art/bat-forest-move.png", "apps/web/public/art/bat-forest-attack.png", "apps/web/public/art/bat-forest-hurt.png", "apps/web/public/art/bat-forest-death.png"],
+      "framesPerAction": {"idle": 6, "move": 6, "attack": 6, "hurt": 3, "death": 6},
+      "source": "Original deterministic Pillow drawing in assets/generate_detailed_sprites.py",
+      "license": "Original project asset; final project license remains owner decision",
+      "scope": "Ash Grove bat encounter"
+    }
+  },
+  "temporaryPlaceholders": []
+}
