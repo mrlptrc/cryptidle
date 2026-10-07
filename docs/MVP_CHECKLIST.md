@@ -4,7 +4,7 @@ Atualizado em 2026-10-06. [x] itens foram demonstrados na sessão; [ ] dependem 
 
 - [x] Repositório inicial continha apenas README; branch `feat/cryptidle-mvp`; plano e contratos registrados.
 - [x] `pnpm install --frozen-lockfile` passou; setup local sem Docker validado em PostgreSQL 17 nativo.
-- [ ] Clone em uma pasta limpa ainda não foi repetido.
+- [x] Clone limpo `C:\\code\\cryptidle-clone-smoke`: instalação congelada, build, três migrations, API e Vite responderam HTTP 200.
 - [x] Cadastro, login, logout e duas contas persistidas — testes PostgreSQL e navegador.
 - [x] Três classes, três regiões/nove monstros, 24 equipamentos, progressão de nível 1–20.
 - [x] Caça autoritativa online/offline, teto de 8h, liquidação, teste de duas abas e sem repetir recompensas.
