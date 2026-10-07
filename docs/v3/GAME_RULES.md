@@ -63,3 +63,22 @@ Do not add them to V3 implementation scope without a recorded owner decision.
 ## Decision updates
 For new decisions record date, owner instruction, affected rule, and implementation stage.
 For balance experiments label values provisional and record simulation/playtest evidence.
+
+### 2026-10-07 — Stage 2 provisional automation defaults (NOT owner-approved)
+Owner instruction: "sim, pode seguir para a etapa 2" (start Stage 2). The four open
+automation questions were not answered, so these defaults were implemented as
+provisional and must be confirmed or changed by the owner:
+- Conditions: `always`, `hp_below(x)`, `enemy_hp_above(x)`; x in 5–95 %.
+  UI offers 30/50/70 % (own HP) and 30/50/80 % (enemy HP).
+- Hotbar: up to 3 slots, one rule per skill; slot order is priority.
+  Tie rule: the first eligible slot wins. One skill per combat round, plus the basic attack.
+- Cooldowns are counted in combat rounds (1 round = 3.2 s of encounter time) and reset
+  at the start of every encounter. They do not carry between encounters, offline time,
+  or region changes, which keeps offline and online settlement identical.
+- Resources: none yet (cooldowns only). A resource system stays an open question.
+- Offline cap: 24 h, measured from the last server settlement. Any unsettled time
+  beyond the cap is discarded; `OFFLINE_CAP_HOURS` may only lower it.
+- Bosses still use the first two hotbar skills as passive bonuses; boss automation
+  is Stage 5 scope.
+- Skill numbers are provisional balance values (simulation:
+  all classes reach the same 120-minute milestones as before the change).

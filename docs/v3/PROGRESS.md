@@ -5,6 +5,29 @@ Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
 This file has NOT been independently verified against the current branch or CI.
 Merge with newer repository records; do not overwrite newer evidence.
 
+## Update — 2026-10-07 (Stage 2 implementation)
+- Authorized task: Stage 2, automatic combat and 24h offline.
+- Branch / commit: feat/v3-stage2-auto-combat (stacked on feat/v3-stage1-baseline); code commit 1f7acd1. PR https://github.com/mrlptrc/cryptidle/pull/3 (base: Stage 1 branch).
+- Changes:
+  - game-core: deterministic per-round combat. A 3-slot hotbar is evaluated in priority order with conditions (`chooseSkill`). Per-skill cooldowns and buff durations; one potion per encounter at the threshold.
+  - Combat events are stored on the encounter; the server returns only rounds already resolved (`visibleEvents`). The summary counts skill uses.
+  - Character.data versioned (`dataVersion: 2`, `automation`). `migrateCharacter` runs on every load and is idempotent. Old characters keep their progress, and their skills become `always` rules (heals become `hp_below 60%`).
+  - Offline cap 8h → 24h (`config.offlineCapMs`). The server default now follows game-core; env samples and compose were updated to 24.
+  - API: `POST /api/build` takes `{rules:[{skillId,condition}],potionThreshold}`, validated by zod and the class check.
+  - UI: hotbar editor in the skills modal; live hotbar (ready/cooldown, last round) in the side panel; skill uses in the return summary.
+- Commands and actual results (local):
+  - pnpm lint: pass
+  - pnpm typecheck: pass
+  - pnpm test: 18/18 pass. New tests cover priority/conditions/cooldown, priority changes outcome, invalid rules, legacy migration, no future-event leak, and 24h bounded cost for every class (< 2 s each).
+  - pnpm build: pass
+  - tsx scripts/simulate.ts: same milestones as before (all classes reach level 20 in 120 min, 0 defeats). balance.json was not updated.
+- Integration tests updated (24h cap, new build payload, new legacy-migration/validation test). Not run locally because Docker still returns HTTP 500; they rely on CI.
+- Checks not executed: integration/E2E locally; visual/console inspection of the new hotbar.
+- Pending decisions: confirm or replace the provisional automation defaults (GAME_RULES "Decision updates"); resource system yes/no.
+- CI on PR #3 (tested SHA 60ed54642b42d8bc169aa04b999386605b1b055a, run https://github.com/mrlptrc/cryptidle/actions/runs/37638792276): unit 18/18, integration 16/16, Playwright journey 1/1, all pass.
+- The first CI run (1b02672) failed the integration assertion that enemy HP drops within 5 s. Cause: with per-round events, HP only changed at round boundaries. Fixed in 60ed546 by interpolating within the current round (never below 1 before the kill resolves), with a unit test added.
+- Next concrete action: the owner reviews the hotbar UI in the browser and decides on the provisional automation defaults; then review/merge #2 and #3 in order.
+
 ## Update — 2026-10-07 (Stage 1 verification via CI)
 - Date and authorized task: 2026-10-07, merge agent kit and resume Stage 1 outstanding verification.
 - Branch / commit / tested SHA: feat/v3-stage1-baseline; docs commit 69b354b; tested SHA 69b354b5a118235945e3be474ee2f382d8edf4c2.
@@ -21,8 +44,9 @@ Merge with newer repository records; do not overwrite newer evidence.
 Gates now satisfied by the CI run above: PostgreSQL integration; marketplace concurrency/rollback; authorization and duplicate settlement; two-account E2E; persistent reward recovery (boss restart). Remaining: visual/console inspection; Stage 2 readiness sign-off by owner.
 
 ## Current authorized delivery
-Stage 1 — baseline audit, stabilization, and outstanding verification.
-Status: INCOMPLETE; do not begin Stage 2 automatically.
+Stage 2 — automatic combat and 24h offline. Authorized by the owner on 2026-10-07.
+Stage 1 closed by the owner's authorization, except the visual/console gate, which carries over.
+Status: IMPLEMENTED, awaiting CI and owner review; do not begin Stage 3 automatically.
 
 ## Last reported Git state
 - Branch: feat/v3-stage1-baseline
