@@ -35,9 +35,10 @@ test('two real accounts hunt, equip, trade, chat and complete the same boss',asy
  await page.getByRole('button',{name:/Cinzabrasa.*Cidade/}).click();await dismiss(page);
  await page.getByRole('button',{name:'Aparência & conquistas'}).click();await expect(page.getByText(/50 \/ 50/)).toBeVisible();await page.getByRole('button',{name:'Usar aparência'}).click();await expect(page.getByText('Em uso')).toBeVisible();await page.getByRole('button',{name:'Fechar janela'}).click();await dismiss(page);
  await page.getByRole('button',{name:/^Inventário/}).click();
- await expect(page.locator('.item').first()).toBeVisible();await page.getByRole('button',{name:'Equipar',exact:true}).first().click();
- await expect(page.getByRole('button',{name:'Remover',exact:true}).first()).toBeVisible();await page.screenshot({path:'docs/evidence/inventory-1366.png',fullPage:true});
- await page.getByRole('button',{name:'Remover',exact:true}).first().click();await page.getByRole('button',{name:'Fechar janela'}).click();
+ const inventoryItem=page.locator('.inventory-slot').first();await expect(inventoryItem).toBeVisible();await inventoryItem.click();
+ await page.getByRole('button',{name:'Equipar',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Desequipar',exact:true})).toBeVisible();await page.screenshot({path:'docs/evidence/inventory-1366.png',fullPage:true});
+ await page.getByRole('button',{name:'Desequipar',exact:true}).click();await page.getByRole('button',{name:'Fechar janela'}).click();
  await page.getByRole('button',{name:'Mercado',exact:true}).click();
  const item=await page.getByLabel('Item para anunciar').locator('option').nth(1).getAttribute('value');expect(item).toBeTruthy();
  await page.getByLabel('Item para anunciar').selectOption(item!);await page.getByLabel('Preço em gold').fill('20');await page.getByRole('button',{name:'Anunciar',exact:true}).click();await expect(page.getByRole('button',{name:'Cancelar',exact:true})).toBeVisible();
