@@ -1,0 +1,33 @@
+{
+    "name":  "@cryptidle/server",
+    "version":  "0.1.0",
+    "private":  true,
+    "type":  "module",
+    "scripts":  {
+                    "dev":  "node --env-file=.env --import tsx/esm --watch src/index.ts",
+                    "build":  "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --bundle --alias:@cryptidle/game-core=../../packages/game-core/src/index.ts --alias:@cryptidle/shared=../../packages/shared/src/index.ts --outfile=dist/index.js",
+                    "start":  "node dist/index.js",
+                    "typecheck":  "tsc --noEmit",
+                    "lint":  "tsc --noEmit",
+                    "test":  "vitest run",
+                    "db:generate":  "prisma generate",
+                    "db:migrate":  "prisma migrate deploy",
+                    "test:integration":  "vitest run test/integration.test.ts"
+                },
+    "dependencies":  {
+                         "@cryptidle/game-core":  "workspace:*",
+                         "@cryptidle/shared":  "workspace:*",
+                         "@prisma/client":  "6.19.0",
+                         "better-auth":  "1.7.7",
+                         "fastify":  "5.12.5",
+                         "@fastify/static":  "10.1.5",
+                         "@fastify/websocket":  "11.3.3",
+                         "@fastify/rate-limit":  "11.2.0",
+                         "zod":  "4.6.5"
+                     },
+    "devDependencies":  {
+                            "prisma":  "6.19.0",
+                            "@types/ws":  "8.18.1",
+                            "esbuild":  "0.25.12"
+                        }
+}
