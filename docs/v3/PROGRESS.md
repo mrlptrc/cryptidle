@@ -24,7 +24,9 @@ Merge with newer repository records; do not overwrite newer evidence.
 - Integration tests updated (24h cap, new build payload, new legacy-migration/validation test). Not run locally because Docker still returns HTTP 500; they rely on CI.
 - Checks not executed: integration/E2E locally; visual/console inspection of the new hotbar.
 - Pending decisions: confirm or replace the provisional automation defaults (GAME_RULES "Decision updates"); resource system yes/no.
-- Next concrete action: check CI on PR #3; the owner reviews the hotbar UI in the browser.
+- CI on PR #3 (tested SHA 60ed54642b42d8bc169aa04b999386605b1b055a, run https://github.com/mrlptrc/cryptidle/actions/runs/37638792276): unit 18/18, integration 16/16, Playwright journey 1/1, all pass.
+- The first CI run (1b02672) failed the integration assertion that enemy HP drops within 5 s. Cause: with per-round events, HP only changed at round boundaries. Fixed in 60ed546 by interpolating within the current round (never below 1 before the kill resolves), with a unit test added.
+- Next concrete action: the owner reviews the hotbar UI in the browser and decides on the provisional automation defaults; then review/merge #2 and #3 in order.
 
 ## Update — 2026-10-07 (Stage 1 verification via CI)
 - Date and authorized task: 2026-10-07, merge agent kit and resume Stage 1 outstanding verification.
