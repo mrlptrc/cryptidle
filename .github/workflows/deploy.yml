@@ -1,0 +1,51 @@
+name: Authorized production deploy
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: cryptidle-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      INSTANCE_ID: ${{ vars.INSTANCE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+      - name: Build immutable release
+        run: |
+          docker build -t "$ECR_REPOSITORY:$GITHUB_SHA" .
+          docker push "$ECR_REPOSITORY:$GITHUB_SHA"
+      - name: Deploy reviewed release using SSM
+        run: |
+          tar czf /tmp/release.tgz docker-compose.yml compose.production.yml infra/Caddyfile infra/cryptidle-backup.service infra/cryptidle-backup.timer scripts/backup.sh scripts/deploy-host.sh scripts/install-operations.sh scripts/restore-check.sh
+          python3 - <<'PY'
+          import os, json, base64, re
+          image = os.environ['ECR_REPOSITORY'] + ':' + os.environ['GITHUB_SHA']
+          if not re.fullmatch(r'[0-9]{12}\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com/[a-zA-Z0-9/_-]+:[a-f0-9]{40}', image):
+              raise ValueError('Invalid ECR image')
+          blob = base64.b64encode(open('/tmp/release.tgz','rb').read()).decode()
+          commands = ['set -eu', 'mkdir -p /opt/cryptidle', "printf '%s' '" + blob + "' | base64 -d | tar xz -C /opt/cryptidle", 'bash /opt/cryptidle/scripts/deploy-host.sh ' + image, 'bash /opt/cryptidle/scripts/install-operations.sh']
+          json.dump({'commands':commands, 'executionTimeout':['1200']}, open('/tmp/commands.json','w'))
+          PY
+          command_id=$(aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name AWS-RunShellScript --parameters file:///tmp/commands.json --query Command.CommandId --output text)
+          for attempt in $(seq 1 120); do
+            status=$(aws ssm get-command-invocation --command-id "$command_id" --instance-id "$INSTANCE_ID" --query Status --output text 2>/dev/null || true)
+            case "$status" in
+              Success) exit 0 ;;
+              Failed|Cancelled|TimedOut) echo "SSM deployment $status; inspect command $command_id"; exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo 'Timed out waiting for deployment'; exit 1

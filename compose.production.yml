@@ -1,0 +1,26 @@
+services:
+  app:
+    environment:
+      NODE_ENV: production
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${LOG_GROUP}
+        awslogs-stream: app
+        mode: non-blocking
+        max-buffer-size: 4m
+  caddy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL}
+    ports: ["80:80", "443:443"]
+    volumes: ["./infra/Caddyfile:/etc/caddy/Caddyfile:ro", "caddy-data:/data", "caddy-config:/config"]
+    depends_on: [app]
+    mem_limit: 128m
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+volumes:
+  caddy-data:
+  caddy-config:

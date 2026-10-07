@@ -1,0 +1,9 @@
+[Unit]
+Description=Cryptidle PostgreSQL backup to private S3
+Requires=docker.service
+After=docker.service network-online.target
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/cryptidle
+EnvironmentFile=/opt/cryptidle/.env
+ExecStart=/bin/bash /opt/cryptidle/scripts/backup.sh

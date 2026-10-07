@@ -1,0 +1,47 @@
+name: cryptidle
+services:
+  db:
+    image: postgres:17.6-bookworm
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cryptidle
+      POSTGRES_DB: cryptidle
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes: ["database:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cryptidle -d cryptidle"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    mem_limit: 512m
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+  migrate:
+    image: ${APP_IMAGE:-cryptidle:local}
+    build: .
+    environment:
+      DATABASE_URL: postgresql://cryptidle:${POSTGRES_PASSWORD}@db:5432/cryptidle
+    depends_on:
+      db: {condition: service_healthy}
+    command: ["pnpm", "--filter", "@cryptidle/server", "exec", "prisma", "migrate", "deploy"]
+    restart: "no"
+  app:
+    image: ${APP_IMAGE:-cryptidle:local}
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://cryptidle:${POSTGRES_PASSWORD}@db:5432/cryptidle
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET}
+      APP_ORIGIN: ${APP_ORIGIN:-http://localhost:3000}
+      NODE_ENV: ${NODE_ENV:-development}
+      WEB_DIST: /app/apps/web/dist
+      PORT: 3000
+      OFFLINE_CAP_HOURS: ${OFFLINE_CAP_HOURS:-8}
+      BOSS_COOLDOWN_MINUTES: ${BOSS_COOLDOWN_MINUTES:-15}
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    ports: ["127.0.0.1:3000:3000"]
+    mem_limit: 768m
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+volumes:
+  database:
+    name: cryptidle-database
