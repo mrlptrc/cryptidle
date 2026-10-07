@@ -17,6 +17,10 @@ Animação base de Phaser em 960×600; imagens novas usam células fixas de **16
 
 ## Arte e alcance
 
-O atlas do Guerreiro, Rato da cripta, Lodo espectral e Morcego sombrio foi criado com ImageGen para esta rodada e inspecionado; o manifest registra prompt e procedência. O corte revelou uma pequena quantidade de pixels semitransparentes cruzando limites de linha. O recortador remove esses resíduos dos dois rows centrais, fixa quatro frames e verifica dimensões e transparência. As peças novas substituem as sprites pequenas apenas para o Guerreiro de skin inicial e os três monstros de Bosque das Cinzas.
+O atlas de referência do Guerreiro, Rato da cripta, Lodo espectral e Morcego sombrio foi criado com ImageGen em uma rodada anterior e está registrado no manifest. As folhas detalhadas desta entrega foram desenhadas de forma determinística em Pillow, com procedência registrada, seis quadros por ação e transparência verificada. As peças novas substituem as sprites pequenas para o Guerreiro de skin inicial e o Morcego do Bosque das Cinzas; rato e lodo continuam usando os sheets compatíveis anteriores.
 
 As outras classes e regiões ainda usam sprites programáticos de baixa resolução do MVP. Boss, mercado e expedição não foram redesenhados. Typecheck, lint, build, 11 testes do núcleo e 14 testes PostgreSQL passaram. O navegador recusou explicitamente a inspeção automatizada de `localhost`; portanto não há screenshot “depois” nem validação visual real da página nesta rodada. A página a 1366×768, 1920×1080 e 390×844, a caça contínua por dois minutos e os fluxos de interação listados no checklist continuam pendentes. As folhas novas foram inspecionadas localmente.
+
+## Prévia e validação de folhas
+
+Em desenvolvimento, `/dev/animations` mostra Guerreiro ou Morcego, ação, direção espelhada para protótipo, velocidade, fundos claro/escuro/Bosque, grade, pivô, pausa e avanço de quadro. `apps/web/src/combatAssets.ts` é o contrato visual; `pnpm validate:assets` verifica existência, RGBA, dimensões e quantidade mínima de quadros. Os sheets desta entrega usam seis quadros em células 96×144, uma escala deliberada para preservar silhueta e evitar ampliar blocos do MVP.

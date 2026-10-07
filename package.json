@@ -12,7 +12,8 @@
     "db:generate": "pnpm --filter @cryptidle/server exec prisma generate",
     "db:migrate": "pnpm --filter @cryptidle/server exec prisma migrate deploy",
     "simulate": "tsx scripts/simulate.ts",
-    "infra:synth": "pnpm --filter @cryptidle/infra synth"
+    "infra:synth": "pnpm --filter @cryptidle/infra synth",
+    "validate:assets": "python assets/validate_combat_sprites.py"
   },
   "devDependencies": { "typescript": "5.9.3", "tsx": "4.20.6", "vitest": "3.2.4", "eslint": "9.39.1", "typescript-eslint": "8.46.4", "@eslint/js": "9.39.1", "globals": "16.5.0", "@types/node": "24.10.1", "@playwright/test": "1.56.1" }
 }
