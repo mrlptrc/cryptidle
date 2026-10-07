@@ -20,7 +20,9 @@ function Hotbar({rules,skills,events}:{rules:AutomationRule[];skills:SkillDefini
   {last&&<p className="hotbar-log">Rodada {last.round}: {last.skillId?skills.find(x=>x.id===last.skillId)?.name:'Ataque'} · {num(last.dealt)} de dano{last.taken?` · sofreu ${num(last.taken)}`:''}{last.healed?` · curou ${num(last.healed)}`:''}{last.potion?' · poção':''}</p>}</div>;
 }
 function Icon({name}:{name:string}){return <img className="icon" src={`/art/${name}.png`} alt=""/>;}
-function Portrait({cls,skin=0}:{cls:string;skin?:number}){return <span className="portrait" style={{backgroundImage:`url(/art/${cls}-${skin}.png)`}}/>;}
+// Approved replacement art; other classes and skins keep their original sheets until redrawn.
+const portraitArt:Record<string,string>={'warrior-0':'/art/warrior-v2-portrait.png'};
+function Portrait({cls,skin=0}:{cls:string;skin?:number}){const art=portraitArt[`${cls}-${skin}`];return <span className="portrait" style={art?{backgroundImage:`url(${art})`,backgroundSize:'contain',backgroundPosition:'center bottom'}:{backgroundImage:`url(/art/${cls}-${skin}.png)`}}/>;}
 export default function App(){
  const [content,setContent]=useState<Content>(),[state,setState]=useState<GameState>(),[session,setSession]=useState<boolean|null>(null),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[modal,setModal]=useState(''),[register,setRegister]=useState(false),[players,setPlayers]=useState<PlayerPresence[]>([]),[messages,setMessages]=useState<ChatMessage[]>([]),[summary,setSummary]=useState<GameState['summary']>(null),[listings,setListings]=useState<Listing[]>([]),[ranking,setRanking]=useState<{id:string;name:string;classId:string;level:number;xp:number}[]>([]),[filter,setFilter]=useState({name:'',rarity:'',slot:''}),[connection,setConnection]=useState('Conectando'),[mobile,setMobile]=useState('world');
  const loading=useRef(false), chatEnd=useRef<HTMLDivElement>(null),modalReturnFocus=useRef<HTMLElement|null>(null);
