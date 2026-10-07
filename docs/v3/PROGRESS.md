@@ -5,6 +5,33 @@ Snapshot prepared on 2026-10-07 from the owner's relayed implementation report.
 This file has NOT been independently verified against the current branch or CI.
 Merge with newer repository records; do not overwrite newer evidence.
 
+## Update — 2026-10-07 (Warrior art closed)
+- Commits 778b503 and d7e2dd3 on feat/v3-art-kit-import; CI passed: https://github.com/mrlptrc/cryptidle/actions/runs/37656168194
+- The new Warrior (skin 0) is now used everywhere: portraits (welcome, class choice, profile, boss room, ranking, skins) via /art/warrior-v2-portrait.png, and every World scene (town, all regions, other players) via spriteKey().
+- Attack: 3 PixelLab edit_image_pixen keyframes (3 generations) + the east rotation, 5 frames in 224×192 cells with pivotX 96/224; CombatAction gained pivotX.
+- Still procedural fallback: Warrior skill/hurt/death; skin 1 "Veterano das Cinzas"; Mage, Priest and monsters (no new art yet).
+- PixelLab: 20 generations left. Evidence: docs/evidence/home-warrior-v2.png, warrior-v2-attack-preview.png.
+- Not verified: the in-game hunt/town with a logged-in character (needs a DB).
+
+## Update — 2026-10-07 (Warrior art pilot)
+- Branch / commit: feat/v3-art-kit-import @ d8de8ab, PR #4. CI passed: https://github.com/mrlptrc/cryptidle/actions/runs/37654643660
+- The owner provided references/concepts/four-classes-lineup.png (ChatGPT) as the class look.
+- PixelLab (character ea38cea6-ce1e-4678-8f63-49ad2763f13c, v3 from the lineup Warrior) produced 8 rotations; the owner approved the model and chose the right-facing profile (east).
+- idle (breathing-idle, 4f) and walk (walking-8-frames, 8f) were packed at native scale and are now used in game as /art/warrior-v2-*.png (192×192, pivotY 172/192). Other Warrior actions keep the procedural fallback.
+- Attack: 3 PixelLab attempts rejected (the character turns toward the camera mid-swing). The owner will draw it in Aseprite per the frame plan given in chat (6 frames, 12 fps, impact on 4, 192×192, feet y=172), then run `pnpm art:process`.
+- Fixed: World.animate resolved animations from the swapped texture key, so actors stopped animating after their first action; it now uses the actor's base key.
+- PixelLab budget: 23 of 40 trial generations left.
+- Not verified: the in-game hunt scene with the new sprites (needs the server and a DB); only /dev/animations was screenshotted (docs/evidence/warrior-v2-*-preview.png).
+
+## Update — 2026-10-07 (art kit import, before Stage 3)
+- Authorized task: integrate cryptidle-art-kit per assets/IMPORT_INSTRUCTIONS.md and assets/AGENTS.md.
+- Branch / commit: feat/v3-art-kit-import (stacked on feat/v3-stage2-auto-combat), commit 0b48ca8.
+- Changes: kit copied without overwriting anything (no path collisions); 11 image hashes verified; assets/PILOT_INTEGRATION.md added (inspection results, runtime status, missing-art inventory, Warrior/Bat pilot plan); root AGENTS.md now points to assets/AGENTS.md. No runtime file changed.
+- Commands: sha256 check against art-kit.manifest.json (11/11 match); pnpm validate:assets passed.
+- Blocker: git push failed twice with GitHub "Internal Server Error" (request 5FCC:1B6A8D:24551E:2C3758:6AC660C5), so there is no PR yet.
+- Pending owner decisions: approve the Warrior model; confirm 192×192 frames vs runtime 112×144; region↔background mapping (the kit's "swamp" is runtime citadel.png).
+- Next concrete action: retry `git push -u origin feat/v3-art-kit-import` and open the PR against feat/v3-stage2-auto-combat.
+
 ## Update — 2026-10-07 (Stage 2 implementation)
 - Authorized task: Stage 2, automatic combat and 24h offline.
 - Branch / commit: feat/v3-stage2-auto-combat (stacked on feat/v3-stage1-baseline); code commit 1f7acd1. PR https://github.com/mrlptrc/cryptidle/pull/3 (base: Stage 1 branch).

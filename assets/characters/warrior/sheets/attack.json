@@ -1,0 +1,91 @@
+{
+  "actor": "warrior",
+  "action": "attack",
+  "texture": "characters/warrior/sheets/attack.png",
+  "frameWidth": 224,
+  "frameHeight": 192,
+  "frames": 5,
+  "pivot": {
+    "x": 0.42857142857142855,
+    "y": 0.8958333333333334
+  },
+  "durations_ms": [
+    90,
+    140,
+    180,
+    130,
+    90
+  ],
+  "loop": false,
+  "impact_frame": 2,
+  "sourceScale": 1.0,
+  "backgroundKey": "alpha",
+  "status": "draft",
+  "report": [
+    {
+      "frame": 0,
+      "sourceBox": [
+        57,
+        50,
+        124,
+        174
+      ],
+      "actorHeight": 124,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 1,
+      "sourceBox": [
+        46,
+        21,
+        119,
+        173
+      ],
+      "actorHeight": 152,
+      "feetX": 96.2,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 2,
+      "sourceBox": [
+        28,
+        47,
+        175,
+        168
+      ],
+      "actorHeight": 121,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 3,
+      "sourceBox": [
+        44,
+        46,
+        117,
+        174
+      ],
+      "actorHeight": 128,
+      "feetX": 95.7,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 4,
+      "sourceBox": [
+        57,
+        50,
+        124,
+        174
+      ],
+      "actorHeight": 124,
+      "feetX": 96.4,
+      "specksRemoved": 0
+    }
+  ],
+  "warnings": [
+    "frame 2: pose touches its grid cell edge in the source; it may be cut off or the grid is wrong",
+    "actor height varies 121-152px: check whether the generator changed body size between poses (fine only for crouch/jump/death)"
+  ],
+  "origin": "PixelLab edit_image_pixen keyframes (anticipation, impact, follow-through) from the approved east rotation; guard = east rotation"
+}

@@ -1,0 +1,74 @@
+{
+  "actor": "warrior",
+  "action": "idle",
+  "texture": "characters/warrior/sheets/idle.png",
+  "frameWidth": 192,
+  "frameHeight": 192,
+  "frames": 4,
+  "pivot": {
+    "x": 0.5,
+    "y": 0.8958333333333334
+  },
+  "durations_ms": [
+    200,
+    200,
+    200,
+    200
+  ],
+  "loop": true,
+  "impact_frame": null,
+  "sourceScale": 1.0,
+  "backgroundKey": "alpha",
+  "status": "draft",
+  "report": [
+    {
+      "frame": 0,
+      "sourceBox": [
+        42,
+        4,
+        106,
+        125
+      ],
+      "actorHeight": 121,
+      "feetX": 96.1,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 1,
+      "sourceBox": [
+        42,
+        3,
+        105,
+        125
+      ],
+      "actorHeight": 122,
+      "feetX": 96.2,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 2,
+      "sourceBox": [
+        42,
+        2,
+        106,
+        122
+      ],
+      "actorHeight": 120,
+      "feetX": 96.1,
+      "specksRemoved": 0
+    },
+    {
+      "frame": 3,
+      "sourceBox": [
+        42,
+        2,
+        105,
+        122
+      ],
+      "actorHeight": 120,
+      "feetX": 96.2,
+      "specksRemoved": 0
+    }
+  ],
+  "warnings": []
+}

@@ -43,6 +43,7 @@ latest explicit decision. Do not silently promote proposals into approved rules.
   unless localization is explicitly requested.
 - Check existing assets and provenance before replacing art. Concept boards are not
   production-ready animation sheets.
+- Before touching art, read assets/AGENTS.md and assets/PILOT_INTEGRATION.md.
 
 ## Verification
 Use scripts from the current package.json, not remembered commands.

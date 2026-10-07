@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "actor": "priest",
+  "status": "specification_only",
+  "runtime_ready": false,
+  "frame_size_proposal": [
+    192,
+    192
+  ],
+  "pivot": null,
+  "directions": [
+    "right",
+    "left"
+  ],
+  "animations": {
+    "idle": {
+      "target_frame_count": 6,
+      "loop": true,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    },
+    "walk": {
+      "target_frame_count": 8,
+      "loop": true,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    },
+    "attack": {
+      "target_frame_count": 8,
+      "loop": false,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    },
+    "skill": {
+      "target_frame_count": 8,
+      "loop": false,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    },
+    "hurt": {
+      "target_frame_count": 3,
+      "loop": false,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    },
+    "death": {
+      "target_frame_count": 6,
+      "loop": false,
+      "texture": null,
+      "frames": [],
+      "durations_ms": [],
+      "impact_frame": null
+    }
+  }
+}
